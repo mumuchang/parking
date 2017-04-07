@@ -9,7 +9,7 @@
     tools:context="com.parking.main.MainActivity" 
     android:orientation="vertical">
 
-   <include layout="@layout/top"/>
+
    	<FrameLayout
    	    android:id="@+id/id_content"
    	    android:layout_weight="1"
@@ -18,5 +18,7 @@
    	  
    	</FrameLayout>
    	
+   	<include layout="@layout/bottom"/>
+
 
 </LinearLayout>
