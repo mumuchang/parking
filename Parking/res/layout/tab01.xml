@@ -2,14 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
-    android:background="#cccccc">
-    <TextView 
+    android:orientation="vertical" >
+
+    <com.baidu.mapapi.map.MapView
+        android:id="@+id/bmapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="这是微信聊天界面"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        android:gravity="center"/>
+        android:layout_weight="2.07"
+        android:clickable="true" />
+
+    <Button
+        android:id="@+id/request"
+        android:layout_width="wrap_content"
+        android:layout_height="62dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="10dip"
+        android:background="@drawable/custom_loc" />
 
 </LinearLayout>

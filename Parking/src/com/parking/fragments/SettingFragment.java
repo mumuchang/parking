@@ -16,6 +16,5 @@ public class SettingFragment extends Fragment {
 			Bundle savedInstanceState) {
 		//引入我们的布局
 		return inflater.inflate(R.layout.tab03, container, false);
-		
 	}
 }
