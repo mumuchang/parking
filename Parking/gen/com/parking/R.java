@@ -48,21 +48,34 @@ public final class R {
         public static final int bg_btn_press_selector=0x7f020009;
         public static final int bg_btn_press_selector_1=0x7f02000a;
         public static final int bg_btn_press_selector_hui=0x7f02000b;
-        public static final int ic_arrow_left=0x7f02000c;
-        public static final int ic_launcher=0x7f02000d;
-        public static final int qq=0x7f02000e;
-        public static final int textview_border=0x7f02000f;
-        public static final int textview_border_bg=0x7f020010;
-        public static final int weibo=0x7f020011;
+        public static final int bottom_bar=0x7f02000c;
+        public static final int custom_loc=0x7f02000d;
+        public static final int ic_arrow_left=0x7f02000e;
+        public static final int ic_launcher=0x7f02000f;
+        public static final int loc=0x7f020010;
+        public static final int qq=0x7f020011;
+        public static final int tab_address_normal=0x7f020012;
+        public static final int tab_find_frd_normal=0x7f020013;
+        public static final int tab_find_frd_pressed=0x7f020014;
+        public static final int tab_settings_normal=0x7f020015;
+        public static final int tab_settings_pressed=0x7f020016;
+        public static final int tab_weixin_normal=0x7f020017;
+        public static final int tab_weixin_pressed=0x7f020018;
+        public static final int textview_border=0x7f020019;
+        public static final int textview_border_bg=0x7f02001a;
+        public static final int title_bar=0x7f02001b;
+        public static final int touxiang=0x7f02001c;
+        public static final int weibo=0x7f02001d;
     }
     public static final class id {
-        public static final int action_settings=0x7f09001a;
+        public static final int action_settings=0x7f090028;
+        public static final int bmapView=0x7f090020;
         public static final int btn_bind=0x7f09000e;
         public static final int btn_login=0x7f090006;
         public static final int btn_register=0x7f090007;
         public static final int btn_reset=0x7f09000f;
         public static final int btn_send=0x7f09000c;
-        public static final int button1=0x7f090010;
+        public static final int denglu=0x7f090023;
         public static final int et_account=0x7f090004;
         public static final int et_input=0x7f090001;
         public static final int et_number=0x7f090000;
@@ -71,18 +84,31 @@ public final class R {
         public static final int et_pwd=0x7f090012;
         public static final int et_pwd_again=0x7f090011;
         public static final int et_verify_code=0x7f09000b;
-        public static final int iv_left=0x7f090014;
-        public static final int iv_right=0x7f090019;
-        public static final int ll_left=0x7f090013;
-        public static final int ll_right=0x7f090017;
+        public static final int fankui=0x7f090027;
+        public static final int id_content=0x7f090010;
+        public static final int id_tab_frd=0x7f090015;
+        public static final int id_tab_frd_img=0x7f090016;
+        public static final int id_tab_setting=0x7f090017;
+        public static final int id_tab_setting_img=0x7f090018;
+        public static final int id_tab_weixin=0x7f090013;
+        public static final int id_tab_weixin_img=0x7f090014;
+        public static final int iv_left=0x7f09001a;
+        public static final int iv_right=0x7f09001f;
+        public static final int jilu=0x7f090025;
+        public static final int ll_left=0x7f090019;
+        public static final int ll_right=0x7f09001d;
+        public static final int qianbao=0x7f090024;
         public static final int qqView=0x7f090009;
+        public static final int request=0x7f090021;
+        public static final int touxiang=0x7f090022;
         public static final int tv_bind=0x7f090003;
-        public static final int tv_left=0x7f090015;
-        public static final int tv_right=0x7f090018;
+        public static final int tv_left=0x7f09001b;
+        public static final int tv_right=0x7f09001e;
         public static final int tv_send=0x7f090002;
-        public static final int tv_title=0x7f090016;
+        public static final int tv_title=0x7f09001c;
         public static final int tv_user=0x7f09000d;
         public static final int weiboView=0x7f090008;
+        public static final int xiaoxi=0x7f090026;
     }
     public static final class layout {
         public static final int activity_bind=0x7f030000;
@@ -92,7 +118,11 @@ public final class R {
         public static final int activity_main=0x7f030004;
         public static final int activity_register=0x7f030005;
         public static final int activity_reset_pwd=0x7f030006;
-        public static final int include_header=0x7f030007;
+        public static final int bottom=0x7f030007;
+        public static final int include_header=0x7f030008;
+        public static final int tab01=0x7f030009;
+        public static final int tab02=0x7f03000a;
+        public static final int tab03=0x7f03000b;
     }
     public static final class menu {
         public static final int main=0x7f080000;

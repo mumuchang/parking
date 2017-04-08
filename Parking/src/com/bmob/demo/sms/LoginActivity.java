@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.BmobUser.BmobThirdUserAuth;
 import cn.bmob.v3.exception.BmobException;
@@ -60,7 +61,6 @@ public class LoginActivity extends BaseActivity{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-		
 	    et_account=(EditText) findViewById(R.id.et_account);
 	    et_password=(EditText) findViewById(R.id.et_password);
 		btn_login=(Button) findViewById(R.id.btn_login);
