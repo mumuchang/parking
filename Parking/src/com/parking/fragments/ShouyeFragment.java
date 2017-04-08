@@ -42,6 +42,7 @@ public class ShouyeFragment extends Fragment  {
 	long startTime;
     long costTime;
     
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -150,4 +151,6 @@ public class ShouyeFragment extends Fragment  {
 			public void onConnectHotSpotMessage(String s, int i){
 	        }
 		};
+
+
 }

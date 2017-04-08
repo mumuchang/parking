@@ -9,13 +9,16 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.parking.main.MainActivity" >
 
-    <FrameLayout
-        android:id="@+id/id_content"
-        android:layout_width="match_parent"
-        android:layout_height="550dp" >
 
-    </FrameLayout>
+    <FrameLayout
+   	    android:id="@+id/id_content"
+   	    android:layout_weight="1"
+   	    android:layout_width="match_parent"
+   	    android:layout_height="0dp">
+   	  
+   	</FrameLayout>
 
     <include layout="@layout/bottom"/>
 
 </LinearLayout>
+

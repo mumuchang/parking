@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="55dp"
-    android:background="@drawable/bottom_bar"
+    android:background="#ffffff"
     android:orientation="horizontal" >
+
     <LinearLayout 
         android:id="@+id/id_tab_weixin"
         android:orientation="vertical"
@@ -17,12 +18,13 @@
             android:layout_height="wrap_content"
             android:clickable="false"
             android:src="@drawable/tab_weixin_pressed"
-            android:background="#00000000"/>
+             android:background="#ffffff"/>
+        
         <TextView 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
             android:text="首页"/>
+        
     </LinearLayout>
     <LinearLayout 
         android:id="@+id/id_tab_frd"
@@ -37,11 +39,11 @@
             android:layout_height="wrap_content"
             android:clickable="false"
             android:src="@drawable/tab_find_frd_normal"
-            android:background="#00000000"/>
+            android:background="#ffffff"/>
         <TextView 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
+            
             android:text="附近"/>
     </LinearLayout>
 
@@ -58,11 +60,11 @@
             android:layout_height="wrap_content"
             android:clickable="false"
             android:src="@drawable/tab_settings_normal"
-            android:background="#00000000"/>
+            android:background="#ffffff"/>
+        
         <TextView 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
             android:text="设置"/>
     </LinearLayout>
 

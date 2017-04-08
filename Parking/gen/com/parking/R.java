@@ -34,10 +34,13 @@ public final class R {
         public static final int tab_weixin_normal=0x7f020009;
         public static final int tab_weixin_pressed=0x7f02000a;
         public static final int title_bar=0x7f02000b;
+        public static final int touxiang=0x7f02000c;
     }
     public static final class id {
-        public static final int action_settings=0x7f080009;
+        public static final int action_settings=0x7f08000f;
         public static final int bmapView=0x7f080007;
+        public static final int denglu=0x7f08000a;
+        public static final int fankui=0x7f08000e;
         public static final int id_content=0x7f080000;
         public static final int id_tab_frd=0x7f080003;
         public static final int id_tab_frd_img=0x7f080004;
@@ -45,7 +48,11 @@ public final class R {
         public static final int id_tab_setting_img=0x7f080006;
         public static final int id_tab_weixin=0x7f080001;
         public static final int id_tab_weixin_img=0x7f080002;
+        public static final int jilu=0x7f08000c;
+        public static final int qianbao=0x7f08000b;
         public static final int request=0x7f080008;
+        public static final int touxiang=0x7f080009;
+        public static final int xiaoxi=0x7f08000d;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
