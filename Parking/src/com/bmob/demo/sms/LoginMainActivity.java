@@ -2,6 +2,7 @@ package com.bmob.demo.sms;
 
 import com.bmob.demo.sms.bean.User;
 import com.parking.R;
+import com.parking.main.MainActivity;
 
 import cn.bmob.v3.BmobUser;
 import android.app.Activity;
@@ -34,6 +35,8 @@ public class LoginMainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO 自动生成的方法存根
+				Intent intent=new Intent(LoginMainActivity.this,MainActivity.class);
+				startActivity(intent);
 				finish();
 			}	
 		});

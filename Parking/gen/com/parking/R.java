@@ -68,14 +68,14 @@ public final class R {
         public static final int weibo=0x7f02001d;
     }
     public static final class id {
-        public static final int action_settings=0x7f090028;
+        public static final int action_settings=0x7f090029;
         public static final int bmapView=0x7f090020;
         public static final int btn_bind=0x7f09000e;
         public static final int btn_login=0x7f090006;
         public static final int btn_register=0x7f090007;
         public static final int btn_reset=0x7f09000f;
         public static final int btn_send=0x7f09000c;
-        public static final int denglu=0x7f090023;
+        public static final int denglu=0x7f090024;
         public static final int et_account=0x7f090004;
         public static final int et_input=0x7f090001;
         public static final int et_number=0x7f090000;
@@ -84,7 +84,7 @@ public final class R {
         public static final int et_pwd=0x7f090012;
         public static final int et_pwd_again=0x7f090011;
         public static final int et_verify_code=0x7f09000b;
-        public static final int fankui=0x7f090027;
+        public static final int fankui=0x7f090028;
         public static final int id_content=0x7f090010;
         public static final int id_tab_frd=0x7f090015;
         public static final int id_tab_frd_img=0x7f090016;
@@ -94,10 +94,11 @@ public final class R {
         public static final int id_tab_weixin_img=0x7f090014;
         public static final int iv_left=0x7f09001a;
         public static final int iv_right=0x7f09001f;
-        public static final int jilu=0x7f090025;
+        public static final int jilu=0x7f090026;
         public static final int ll_left=0x7f090019;
         public static final int ll_right=0x7f09001d;
-        public static final int qianbao=0x7f090024;
+        public static final int name=0x7f090023;
+        public static final int qianbao=0x7f090025;
         public static final int qqView=0x7f090009;
         public static final int request=0x7f090021;
         public static final int touxiang=0x7f090022;
@@ -108,7 +109,7 @@ public final class R {
         public static final int tv_title=0x7f09001c;
         public static final int tv_user=0x7f09000d;
         public static final int weiboView=0x7f090008;
-        public static final int xiaoxi=0x7f090026;
+        public static final int xiaoxi=0x7f090027;
     }
     public static final class layout {
         public static final int activity_bind=0x7f030000;
