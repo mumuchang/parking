@@ -3,17 +3,27 @@ package com.parking.main;
 import cn.bmob.v3.Bmob;
 
 
+
+
+
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.SupportMapFragment;
+import com.bmob.demo.sms.LoginActivity;
 import com.parking.R;
 import com.parking.fragments.SettingFragment;
 import com.parking.fragments.ShouyeFragment;
 import com.parking.fragments.ZhouweiFragment;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
@@ -29,9 +39,10 @@ public class MainActivity extends Activity implements OnClickListener{
 		private ImageButton mImgZhouwei;
 		private ImageButton mImgSetting;
 		//初始化4个Fragment
-		private android.app.Fragment tab01;
+		private Fragment tab01;
 		private android.app.Fragment tab02;
 		private android.app.Fragment tab03;
+		private Button btn;
 		
 		
     @Override
@@ -42,12 +53,14 @@ public class MainActivity extends Activity implements OnClickListener{
         initView();//初始化所有的view
 		initEvents();
 		setSelect(0);//默认显示首页界面
+	   
     }
 
 
 
 	private void initEvents() {
 		// TODO Auto-generated method stub
+	
 		mTabShouye.setOnClickListener(this);
 		mTabZhouwei.setOnClickListener(this);
 		mTabSetting.setOnClickListener(this);
@@ -83,26 +96,7 @@ public class MainActivity extends Activity implements OnClickListener{
         return super.onOptionsItemSelected(item);
     }
     
-    @Override
-	public void onClick(View v) {
-		resetImg();
-		switch (v.getId()) {
-		case R.id.id_tab_weixin://当点击首页按钮时，切换图片为亮色，切换fragment为首页界面
-			setSelect(0);
-			break;
-		case R.id.id_tab_frd:
-			setSelect(1);
-			break;
-		case R.id.id_tab_setting:
-			setSelect(2);
-			break;
-
-		default:
-			break;
-		}
-		
-	}
-    
+  
     /*
 	 * 将图片设置为亮色的；切换显示内容的fragment
 	 * */
@@ -114,6 +108,7 @@ public class MainActivity extends Activity implements OnClickListener{
 		case 0:
 			if (tab01 == null) {
 				tab01 = new ShouyeFragment();
+				
 				/*
 				 * 将Fragment添加到活动中，public abstract FragmentTransaction add (int containerViewId, Fragment fragment)
 				*containerViewId即为Optional identifier of the container this fragment is to be placed in. If 0, it will not be placed in a container.
@@ -169,4 +164,27 @@ public class MainActivity extends Activity implements OnClickListener{
 		mImgZhouwei.setImageResource(R.drawable.tab_find_frd_normal);
 		mImgSetting.setImageResource(R.drawable.tab_settings_normal);
 	}
+
+
+
+	  @Override
+		public void onClick(View v) {
+			resetImg();
+			switch (v.getId()) {
+			case R.id.id_tab_weixin://当点击首页按钮时，切换图片为亮色，切换fragment为首页界面
+				setSelect(0);
+				break;
+			case R.id.id_tab_frd:
+				setSelect(1);
+				break;
+			case R.id.id_tab_setting:
+				setSelect(2);
+				break;
+
+			default:
+				break;
+			}
+			
+		}
+	    
 }
