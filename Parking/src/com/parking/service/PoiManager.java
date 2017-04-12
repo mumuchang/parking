@@ -3,17 +3,11 @@ package com.parking.service;
 
 import com.baidu.mapapi.map.BaiduMap;	
 import com.baidu.mapapi.map.BaiduMap.OnPolylineClickListener;
-import com.baidu.mapapi.map.BitmapDescriptor;
-import com.baidu.mapapi.map.BitmapDescriptorFactory;
-import com.baidu.mapapi.map.CircleOptions;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.Marker;
-import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.Overlay;
 import com.baidu.mapapi.map.OverlayOptions;
-import com.baidu.mapapi.map.Stroke;
 import com.baidu.mapapi.model.LatLngBounds;
-import com.parking.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +31,7 @@ public abstract class PoiManager implements OnMarkerClickListener, OnPolylineCli
 
     BaiduMap mBaiduMap = null;
     private List<OverlayOptions> mOverlayOptionList = null;
-    int flag=0;
+
     List<Overlay> mOverlayList = null;
 
     /**
@@ -45,9 +39,8 @@ public abstract class PoiManager implements OnMarkerClickListener, OnPolylineCli
      * 
      * @param baiduMap
      */
-    public PoiManager(BaiduMap baiduMap,int f) {
+    public PoiManager(BaiduMap baiduMap) {
         mBaiduMap = baiduMap;
-        flag=f;
         // mBaiduMap.setOnMarkerClickListener(this);
         if (mOverlayOptionList == null) {
             mOverlayOptionList = new ArrayList<OverlayOptions>();
@@ -57,7 +50,7 @@ public abstract class PoiManager implements OnMarkerClickListener, OnPolylineCli
         }
     }
 
-	/**
+    /**
      * 覆写此方法设置要管理的Overlay列表
      * 
      * @return 管理的Overlay列表
@@ -109,20 +102,17 @@ public abstract class PoiManager implements OnMarkerClickListener, OnPolylineCli
         if (mBaiduMap == null) {
             return;
         }
-       
-        	  if (mOverlayList.size() > 0) {
-                  LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                  for (Overlay overlay : mOverlayList) {
-                      // polyline 中的点可能太多，只按marker 缩放
-                      if (overlay instanceof Marker) {
-                          builder.include(((Marker) overlay).getPosition());
-                      }
-                  }
-                  mBaiduMap.setMapStatus(MapStatusUpdateFactory
-                          .newLatLngBounds(builder.build()));
-              }
-       
-       
+        if (mOverlayList.size() > 0) {
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            for (Overlay overlay : mOverlayList) {
+                // polyline 中的点可能太多，只按marker 缩放
+                if (overlay instanceof Marker) {
+                    builder.include(((Marker) overlay).getPosition());
+                }
+            }
+            mBaiduMap.setMapStatus(MapStatusUpdateFactory
+                    .newLatLngBounds(builder.build()));
+        }
     }
 
 }

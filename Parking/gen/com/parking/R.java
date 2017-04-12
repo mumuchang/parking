@@ -54,21 +54,19 @@ public final class R {
         public static final int ic_launcher=0x7f02000f;
         public static final int icon_geo=0x7f020010;
         public static final int loc=0x7f020011;
-        public static final int park=0x7f020012;
-        public static final int pp=0x7f020013;
-        public static final int qq=0x7f020014;
-        public static final int tab_address_normal=0x7f020015;
-        public static final int tab_find_frd_normal=0x7f020016;
-        public static final int tab_find_frd_pressed=0x7f020017;
-        public static final int tab_settings_normal=0x7f020018;
-        public static final int tab_settings_pressed=0x7f020019;
-        public static final int tab_weixin_normal=0x7f02001a;
-        public static final int tab_weixin_pressed=0x7f02001b;
-        public static final int textview_border=0x7f02001c;
-        public static final int textview_border_bg=0x7f02001d;
-        public static final int title_bar=0x7f02001e;
-        public static final int touxiang=0x7f02001f;
-        public static final int weibo=0x7f020020;
+        public static final int qq=0x7f020012;
+        public static final int tab_address_normal=0x7f020013;
+        public static final int tab_find_frd_normal=0x7f020014;
+        public static final int tab_find_frd_pressed=0x7f020015;
+        public static final int tab_settings_normal=0x7f020016;
+        public static final int tab_settings_pressed=0x7f020017;
+        public static final int tab_weixin_normal=0x7f020018;
+        public static final int tab_weixin_pressed=0x7f020019;
+        public static final int textview_border=0x7f02001a;
+        public static final int textview_border_bg=0x7f02001b;
+        public static final int title_bar=0x7f02001c;
+        public static final int touxiang=0x7f02001d;
+        public static final int weibo=0x7f02001e;
     }
     public static final class id {
         public static final int action_settings=0x7f09002e;
