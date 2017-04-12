@@ -108,15 +108,17 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
     private double mCurrentLat = 0.0;
     private double mCurrentLon = 0.0;
     private float mCurrentAccracy;
-    
+    String keystr = "";
     MapView mMapView;
     BaiduMap mBaiduMap;
-    
+    int flag =0;//绘制的不是停车场
     //
     
     
  //搜索相关
     private PoiSearch mPoiSearch = null;
+    private PoiSearch mPoiSearch1 = null;
+    
     private SuggestionSearch mSuggestionSearch = null;
     private List<String> suggest;
     private AutoCompleteTextView keyWorldsView = null;
@@ -239,6 +241,9 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
      // 初始化搜索模块，注册搜索事件监听
         mPoiSearch = PoiSearch.newInstance();
         mPoiSearch.setOnGetPoiSearchResultListener(this);
+        
+        mPoiSearch1 = PoiSearch.newInstance();
+        mPoiSearch1.setOnGetPoiSearchResultListener(this);
         
      // 初始化建议搜索模块，注册建议搜索事件监听
         mSuggestionSearch = SuggestionSearch.newInstance();
@@ -396,6 +401,7 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
         mMapView.onDestroy();
         mMapView = null;
         mPoiSearch.destroy();
+        mPoiSearch1.destroy(); 
 	    mSuggestionSearch.destroy();
         super.onDestroy();
     }
@@ -407,14 +413,25 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
 	 public void searchButtonProcess(View v) {
 	        searchType = 1;
 	       
-	        String keystr = keyWorldsView.getText().toString();
+	       keystr=keyWorldsView.getText().toString();
+	        mBaiduMap.clear();
+	        flag=0;
 	        mPoiSearch.searchInCity((new PoiCitySearchOption())
 	                .city(city).keyword(keystr).pageNum(loadIndex));
+	      //  flag=1;
+	        //mPoiSearch1.searchInCity((new PoiCitySearchOption())
+	             //   .city(city).keyword(keystr+"停车场").pageNum(loadIndex));
 	    }
+	 
 
 	    public void goToNextPage(View v) {
 	        loadIndex++;
 	        searchButtonProcess(null);
+	    }
+	 
+	    @SuppressWarnings("unused")
+		private class MySearch extends PoiCitySearchOption {
+	    	
 	    }
 			
 	    /**
@@ -505,21 +522,24 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
 	            return;
 	        }
 	        if (result.error == SearchResult.ERRORNO.NO_ERROR) {
-	            mBaiduMap.clear();
-	            PoiService overlay = new MyPoiOverlay(mBaiduMap);
-	            mBaiduMap.setOnMarkerClickListener(overlay);
-	            overlay.setData(result);
-	            overlay.addToMap();
-	            overlay.zoomToSpan();
-
-	            switch( searchType ) {
+	       
+	        		//目的地
+	          PoiService overlay = new MyPoiOverlay(mBaiduMap,flag);
+		            mBaiduMap.setOnMarkerClickListener(overlay);
+		            overlay.setData(result);
+		            overlay.addToMap();
+		            overlay.zoomToSpan();
+		        switch( searchType ) {
 	                case 2:
 	                    showNearbyArea(center, radius);
 	                    break;
 	                default:
 	                    break;
 	            }
-
+	            flag=1;
+	            mPoiSearch1.searchInCity((new PoiCitySearchOption())
+	                    .city(city).keyword(keystr+"停车场").pageNum(loadIndex));
+	            
 	            return;
 	        }
 	        if (result.error == SearchResult.ERRORNO.AMBIGUOUS_KEYWORD) {
@@ -539,8 +559,8 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
 
 		private class MyPoiOverlay extends PoiService {
 
-	        public MyPoiOverlay(BaiduMap baiduMap) {
-	            super(baiduMap);
+	        public MyPoiOverlay(BaiduMap baiduMap,int f) {
+	            super(baiduMap,f);
 	        }
 
 	        @Override
@@ -549,6 +569,8 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
 	            PoiInfo poi = getPoiResult().getAllPoi().get(index);
 	            // if (poi.hasCaterDetails) {
 	            mPoiSearch.searchPoiDetail((new PoiDetailSearchOption())
+	                    .poiUid(poi.uid));
+	            mPoiSearch1.searchPoiDetail((new PoiDetailSearchOption())
 	                    .poiUid(poi.uid));
 	            // }
 	            return true;
