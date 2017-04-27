@@ -5,12 +5,14 @@ package com.parking.service;
 import android.os.Bundle;
 
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.Polyline;
 import com.baidu.mapapi.search.poi.PoiResult;
+import com.parking.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,15 +25,15 @@ public class PoiService extends PoiManager {
     private static final int MAX_POI_SIZE = 10;
 
     private PoiResult mPoiResult = null;
-
+    private int f;
     /**
      * 构造函数
      * 
      * @param baiduMap
      *            该 PoiOverlay 引用的 BaiduMap 对象
      */
-    public PoiService(BaiduMap baiduMap) {
-        super(baiduMap);
+    public PoiService(BaiduMap baiduMap,int flag) {
+        super(baiduMap,flag);
     }
 
     /**
@@ -59,10 +61,18 @@ public class PoiService extends PoiManager {
             markerSize++;
             Bundle bundle = new Bundle();
             bundle.putInt("index", i);
-            markerList.add(new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.fromAssetWithDpi("Icon_mark"
-                            + markerSize + ".png")).extraInfo(bundle)
-                    .position(mPoiResult.getAllPoi().get(i).location));
+            if(flag==0){
+            	markerList.add(new MarkerOptions()
+                .icon(BitmapDescriptorFactory.fromAssetWithDpi("Icon_mark"
+                        + markerSize + ".png")).extraInfo(bundle)
+                .position(mPoiResult.getAllPoi().get(i).location));
+            }
+            if(flag==1){
+            	BitmapDescriptor centerBitmap = BitmapDescriptorFactory
+    	                .fromResource(R.drawable.pp);
+            	markerList.add(new MarkerOptions().icon(centerBitmap).extraInfo(bundle)
+                .position(mPoiResult.getAllPoi().get(i).location));
+            }
             
         }
         return markerList;

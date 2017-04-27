@@ -84,9 +84,8 @@
             android:exported="false">
   </service>
         <meta-data
-            android:name="com.baidu.lbsapi.API_KEY"
-            
-            android:value="fOSmhvklF8niTVmEqEuAqKy20cVaYTDW" />
+            android:name="com.baidu.lbsapi.API_KEY"        
+            android:value="GduoqLqjhI7xnCjUjyQTfcYRHKMcGOq8" />
         
     </application>
 
