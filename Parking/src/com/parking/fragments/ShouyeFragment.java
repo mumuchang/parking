@@ -9,6 +9,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
@@ -108,15 +110,21 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
     private double mCurrentLat = 0.0;
     private double mCurrentLon = 0.0;
     private float mCurrentAccracy;
-    
+    String keystr = "";
     MapView mMapView;
     BaiduMap mBaiduMap;
+    int flag =0;//绘制的不是停车场
     
+    View view=null;
     //
     
+    //路况
+    private ImageButton lukuang=null;
     
  //搜索相关
     private PoiSearch mPoiSearch = null;
+    private PoiSearch mPoiSearch1 = null;
+    
     private SuggestionSearch mSuggestionSearch = null;
     private List<String> suggest;
     private AutoCompleteTextView keyWorldsView = null;
@@ -130,14 +138,16 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
 
     int searchType = 0;  // 搜索的类型，在显示时区分
     
-    private String city="北京";
+    private String city1="北京";
     private TextView tvSearch;
+    
+    PoiService overlay=null;
 
     
     
  // UI相关
     OnCheckedChangeListener radioButtonListener;
-    Button requestLocButton;
+    ImageButton requestLocButton;
     boolean isFirstLoc = true; // 是否首次定位
     private MyLocationData locData;
     private float direction;
@@ -149,96 +159,140 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
 		//引入我们的布局
 		//引入我们的布局
 		SDKInitializer.initialize(getActivity().getApplicationContext());
-		View view=inflater.inflate(R.layout.tab01, container, false);
-		requestLocButton = (Button) view.findViewById(R.id.button1);
+		 view=inflater.inflate(R.layout.tab01, container, false);
+		requestLocButton = (ImageButton) view.findViewById(R.id.button1);
         mSensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);//获取传感器管理服务
         mCurrentMode = LocationMode.NORMAL;
-        requestLocButton.setText("普通");
+        
         
         
         
         OnClickListener btnClickListener = new OnClickListener() {
-         public void onClick(View v) {
-          switch (mCurrentMode) {
-            case NORMAL:
-                requestLocButton.setText("跟随");
-                mCurrentMode = LocationMode.FOLLOWING;
-                mBaiduMap
-                        .setMyLocationConfiguration(new MyLocationConfiguration(
-                                mCurrentMode, true, mCurrentMarker));
-                MapStatus.Builder builder = new MapStatus.Builder();
-                builder.overlook(0);
-                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
-                break;
-            case COMPASS:
-                requestLocButton.setText("普通");
-                mCurrentMode = LocationMode.NORMAL;
-                mBaiduMap
-                        .setMyLocationConfiguration(new MyLocationConfiguration(
-                                mCurrentMode, true, mCurrentMarker));
-                MapStatus.Builder builder1 = new MapStatus.Builder();
-                builder1.overlook(0);
-                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder1.build()));
-                break;
-            case FOLLOWING:
-                requestLocButton.setText("罗盘");
-                mCurrentMode = LocationMode.COMPASS;
-                mBaiduMap
-                        .setMyLocationConfiguration(new MyLocationConfiguration(
-                                mCurrentMode, true, mCurrentMarker));
-                break;
-            default:
-                break;
-                }
-            }
-        };
-		
-        requestLocButton.setOnClickListener(btnClickListener);
-  
-        RadioGroup group = (RadioGroup) view.findViewById(R.id.radioGroup);
-        radioButtonListener = new OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == R.id.defaulticon) {
-                    // 传入null则，恢复默认图标
-                    mCurrentMarker = null;
-                    mBaiduMap
-                            .setMyLocationConfiguration(new MyLocationConfiguration(
-                                    mCurrentMode, true, null));
-                }
-                if (checkedId == R.id.customicon) {
-                    // 修改为自定义marker
-                    mCurrentMarker = BitmapDescriptorFactory
-                            .fromResource(R.drawable.icon_geo);
-                    mBaiduMap
-                            .setMyLocationConfiguration(new MyLocationConfiguration(
-                                    mCurrentMode, true, mCurrentMarker,
-                                    accuracyCircleFillColor, accuracyCircleStrokeColor));
-                }
-            }
-        };
-        group.setOnCheckedChangeListener(radioButtonListener);
+	         public void onClick(View v) {
+	   //重新定位
+	        	 mBaiduMap.setMyLocationEnabled(true);
+	        	 
+	        	 //关闭搜索
+	        	
+	        	 mBaiduMap.clear();
+	        	 mBaiduMap.showMapPoi(false);
+	     		
+	    		//修改定位数据后刷新图层生效
+	    		
+	        	 
+		            //定位
+	          switch (mCurrentMode) {
+	            case NORMAL:
+	                
+	                requestLocButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.loc1));
+	                mCurrentMode = LocationMode.FOLLOWING;
+	                mBaiduMap
+	                        .setMyLocationConfiguration(new MyLocationConfiguration(
+	                                mCurrentMode, true, mCurrentMarker));
+	                MapStatus.Builder builder = new MapStatus.Builder();
+	                builder.overlook(0);
+	                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+	                break;
+	            case COMPASS:
+	                
+	                requestLocButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.loc2));
+	                mCurrentMode = LocationMode.NORMAL;
+	                mBaiduMap
+	                        .setMyLocationConfiguration(new MyLocationConfiguration(
+	                                mCurrentMode, true, mCurrentMarker));
+	                MapStatus.Builder builder1 = new MapStatus.Builder();
+	                builder1.overlook(0);
+	                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder1.build()));
+	                break;
+	            case FOLLOWING:
+	              
+	                requestLocButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.loc3));
+	                mCurrentMode = LocationMode.COMPASS;
+	                mBaiduMap
+	                        .setMyLocationConfiguration(new MyLocationConfiguration(
+	                                mCurrentMode, true, mCurrentMarker));
+	                break;
+	            default:
+	                break;
+	                }
 
-        // 地图初始化
-        mMapView = (MapView) view.findViewById(R.id.bmapView);
-        mBaiduMap = mMapView.getMap();
-        // 开启定位图层
-        mBaiduMap.setMyLocationEnabled(true);
-        // 定位初始化dubudi
-        mLocClient = new LocationClient( getActivity().getApplicationContext());
-        mLocClient.registerLocationListener(myListener);
-        LocationClientOption option = new LocationClientOption();
-        option.setOpenGps(true); // 打开gps
-        option.setCoorType("bd09ll"); // 设置坐标类型
-        option.setScanSpan(1000);
-        mLocClient.setLocOption(option);
-        mLocClient.start();
-        mLocClient.requestLocation();
+	            }
+	        };
+			
+	        requestLocButton.setOnClickListener(btnClickListener);
+	  
+	        RadioGroup group = (RadioGroup) view.findViewById(R.id.radioGroup);
+	        radioButtonListener = new OnCheckedChangeListener() {
+	            @Override
+	            public void onCheckedChanged(RadioGroup group, int checkedId) {
+	                if (checkedId == R.id.defaulticon) {
+	                    // 传入null则，恢复默认图标
+	                    mCurrentMarker = null;
+	                    mBaiduMap
+	                            .setMyLocationConfiguration(new MyLocationConfiguration(
+	                                    mCurrentMode, true, null));
+	                }
+	                if (checkedId == R.id.customicon) {
+	                    // 修改为自定义marker
+	                    mCurrentMarker = BitmapDescriptorFactory
+	                            .fromResource(R.drawable.icon_geo);
+	                    mBaiduMap
+	                            .setMyLocationConfiguration(new MyLocationConfiguration(
+	                                    mCurrentMode, true, mCurrentMarker,
+	                                    accuracyCircleFillColor, accuracyCircleStrokeColor));
+	                }
+	            }
+	        };
+	        group.setOnCheckedChangeListener(radioButtonListener);
+
+	        // 地图初始化
+	        mMapView = (MapView) view.findViewById(R.id.bmapView);
+	        mBaiduMap = mMapView.getMap();
+	        // 开启定位图层
+	        mBaiduMap.setMyLocationEnabled(true);
+	        // 定位初始化dubudi
+	        mLocClient = new LocationClient( getActivity().getApplicationContext());
+	        mLocClient.registerLocationListener(myListener);
+	        LocationClientOption option = new LocationClientOption();
+	        option.setOpenGps(true); // 打开gps
+	        option.setCoorType("bd09ll"); // 设置坐标类型
+	        option.setScanSpan(1000);
+	        mLocClient.setLocOption(option);
+	        mLocClient.start();
+	        mLocClient.requestLocation();
+	        
+	        //显示路况
+	        lukuang=(ImageButton)view.findViewById(R.id.lukuang);
+	        
+	        lukuang.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					if(mBaiduMap.isTrafficEnabled()==false){
+						lukuang.setBackgroundDrawable(getResources().getDrawable(R.drawable.lukuangstart));
+						mBaiduMap.setTrafficEnabled(true);
+					}else{
+						lukuang.setBackgroundDrawable(getResources().getDrawable(R.drawable.lukuangclose));
+						mBaiduMap.setTrafficEnabled(false);
+					}
+				}
+	        	
+	        });
+	        
+	        
+	       
+	        
+        
+        
         
         //搜索
      // 初始化搜索模块，注册搜索事件监听
         mPoiSearch = PoiSearch.newInstance();
         mPoiSearch.setOnGetPoiSearchResultListener(this);
+        
+        mPoiSearch1 = PoiSearch.newInstance();
+        mPoiSearch1.setOnGetPoiSearchResultListener(this);
         
      // 初始化建议搜索模块，注册建议搜索事件监听
         mSuggestionSearch = SuggestionSearch.newInstance();
@@ -253,9 +307,13 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				searchButtonProcess(v);
+				// 关闭定位图层
+		        mBaiduMap.setMyLocationEnabled(false);
 			}
         	
         });
+     
+   
         
         sugAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_dropdown_item_1line,suggest);
         
@@ -285,7 +343,7 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
                  */
                 mSuggestionSearch
                         .requestSuggestion((new SuggestionSearchOption())//ruhe获得定位城市
-                                .keyword(cs.toString()).city(city.toString()));
+                                .keyword(cs.toString()).city(city1.toString()));
             }
 
 
@@ -300,6 +358,8 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
 		
 		return view;
 	}
+
+
 
 	@Override
     public void onSensorChanged(SensorEvent sensorEvent) {
@@ -336,7 +396,9 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
         public void onReceiveLocation(BDLocation location) {
             // map view 销毁后不在处理新接收的位置
             if (location == null || mMapView == null) {
-                return;
+            	Log.e("aaaaa", "aaaaaaaaa");
+            	return;
+                
             }
             mCurrentLat = location.getLatitude();
             mCurrentLon = location.getLongitude();
@@ -348,7 +410,7 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
                     .longitude(location.getLongitude()).build();
             mBaiduMap.setMyLocationData(locData);
             
-            requestLocButton.setText("loc");
+            //requestLocButton.setText("loc");
             
             if (isFirstLoc) {
                 isFirstLoc = false;
@@ -396,6 +458,7 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
         mMapView.onDestroy();
         mMapView = null;
         mPoiSearch.destroy();
+        mPoiSearch1.destroy(); 
 	    mSuggestionSearch.destroy();
         super.onDestroy();
     }
@@ -407,14 +470,25 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
 	 public void searchButtonProcess(View v) {
 	        searchType = 1;
 	       
-	        String keystr = keyWorldsView.getText().toString();
+	       keystr=keyWorldsView.getText().toString();
+	        mBaiduMap.clear();
+	        flag=0;
 	        mPoiSearch.searchInCity((new PoiCitySearchOption())
-	                .city(city).keyword(keystr).pageNum(loadIndex));
+	                .city(city1).keyword(keystr).pageNum(loadIndex));
+	      //  flag=1;
+	        //mPoiSearch1.searchInCity((new PoiCitySearchOption())
+	             //   .city(city).keyword(keystr+"停车场").pageNum(loadIndex));
 	    }
+	 
 
 	    public void goToNextPage(View v) {
 	        loadIndex++;
 	        searchButtonProcess(null);
+	    }
+	 
+	    @SuppressWarnings("unused")
+		private class MySearch extends PoiCitySearchOption {
+	    	
 	    }
 			
 	    /**
@@ -505,21 +579,24 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
 	            return;
 	        }
 	        if (result.error == SearchResult.ERRORNO.NO_ERROR) {
-	            mBaiduMap.clear();
-	            PoiService overlay = new MyPoiOverlay(mBaiduMap);
-	            mBaiduMap.setOnMarkerClickListener(overlay);
-	            overlay.setData(result);
-	            overlay.addToMap();
-	            overlay.zoomToSpan();
-
-	            switch( searchType ) {
+	       
+	        		//目的地
+	           overlay = new MyPoiOverlay(mBaiduMap,flag);
+		            mBaiduMap.setOnMarkerClickListener(overlay);
+		            overlay.setData(result);
+		            overlay.addToMap();
+		            overlay.zoomToSpan();
+		        switch( searchType ) {
 	                case 2:
 	                    showNearbyArea(center, radius);
 	                    break;
 	                default:
 	                    break;
 	            }
-
+	            flag=1;
+	            mPoiSearch1.searchInCity((new PoiCitySearchOption())
+	                    .city(city1).keyword(keystr+"停车场").pageNum(loadIndex));
+	            
 	            return;
 	        }
 	        if (result.error == SearchResult.ERRORNO.AMBIGUOUS_KEYWORD) {
@@ -539,8 +616,8 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
 
 		private class MyPoiOverlay extends PoiService {
 
-	        public MyPoiOverlay(BaiduMap baiduMap) {
-	            super(baiduMap);
+	        public MyPoiOverlay(BaiduMap baiduMap,int f) {
+	            super(baiduMap,f);
 	        }
 
 	        @Override
@@ -549,6 +626,8 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
 	            PoiInfo poi = getPoiResult().getAllPoi().get(index);
 	            // if (poi.hasCaterDetails) {
 	            mPoiSearch.searchPoiDetail((new PoiDetailSearchOption())
+	                    .poiUid(poi.uid));
+	            mPoiSearch1.searchPoiDetail((new PoiDetailSearchOption())
 	                    .poiUid(poi.uid));
 	            // }
 	            return true;
