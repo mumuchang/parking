@@ -1,3 +1,4 @@
+
 package com.parking.fragments;
 
 
@@ -755,3 +756,4 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
     
     
 }
+
