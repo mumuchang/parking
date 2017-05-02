@@ -1,3 +1,4 @@
+
 package com.parking.fragments;
 
 
@@ -5,7 +6,9 @@ package com.parking.fragments;
 import com.parking.R;
 import com.parking.service.PoiService;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -38,6 +41,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +49,7 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
@@ -57,6 +62,7 @@ import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 
+
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.app.Fragment;
@@ -66,6 +72,7 @@ import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.CircleOptions;
 import com.baidu.mapapi.map.GroundOverlayOptions;
+
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MarkerOptions;
@@ -74,7 +81,9 @@ import com.baidu.mapapi.map.Stroke;
 import com.baidu.mapapi.map.SupportMapFragment;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.LatLngBounds;
-
+import com.baidu.mapapi.navi.BaiduMapAppNotSupportNaviException;
+import com.baidu.mapapi.navi.BaiduMapNavigation;
+import com.baidu.mapapi.navi.NaviParaOption;
 import com.baidu.mapapi.search.core.CityInfo;
 import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.core.SearchResult;
@@ -92,11 +101,14 @@ import com.baidu.mapapi.search.sug.OnGetSuggestionResultListener;
 import com.baidu.mapapi.search.sug.SuggestionResult;
 import com.baidu.mapapi.search.sug.SuggestionSearch;
 import com.baidu.mapapi.search.sug.SuggestionSearchOption;
+import com.baidu.mapapi.utils.OpenClientUtil;
+
 
 public class ShouyeFragment extends Fragment implements SensorEventListener,OnGetPoiSearchResultListener, OnGetSuggestionResultListener {
 
 
  // 定位相关
+	
     LocationClient mLocClient;
     public MyLocationListenner myListener = new MyLocationListenner();
     private LocationMode mCurrentMode;
@@ -152,6 +164,19 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
     private MyLocationData locData;
     private float direction;
     
+    /*
+     * 导航
+     */
+    private Button daohang=null;
+    
+ // 天安门坐标起点
+    double mLat1 = 39.915291;
+    double mLon1 = 116.403857;
+    // 百度大厦坐标 终点
+    double mLat2 = 40.056858;
+    double mLon2 = 116.308194;
+    
+    private CoordType mCoordType;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -164,7 +189,22 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
         mSensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);//获取传感器管理服务
         mCurrentMode = LocationMode.NORMAL;
         
+
+        /*
+         * 导航
+         */
+        daohang=(Button) view.findViewById(R.id.daohang);
         
+        mCoordType = SDKInitializer.getCoordType();//获取全局设置的坐标类型
+        SDKInitializer.setCoordType(CoordType.BD09LL);//百度坐标类型
+        
+        daohang.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+            	startNavi();
+            }
+
+        });
         
         
         OnClickListener btnClickListener = new OnClickListener() {
@@ -176,6 +216,8 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
 	        	
 	        	 mBaiduMap.clear();
 	        	 mBaiduMap.showMapPoi(false);
+	        	 //让地图中心为定位位置
+	        	 
 	     		
 	    		//修改定位数据后刷新图层生效
 	    		
@@ -192,6 +234,7 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
 	                MapStatus.Builder builder = new MapStatus.Builder();
 	                builder.overlook(0);
 	                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+	                mBaiduMap.showMapPoi(true);
 	                break;
 	            case COMPASS:
 	                
@@ -203,6 +246,7 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
 	                MapStatus.Builder builder1 = new MapStatus.Builder();
 	                builder1.overlook(0);
 	                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder1.build()));
+	                mBaiduMap.showMapPoi(true);
 	                break;
 	            case FOLLOWING:
 	              
@@ -211,6 +255,7 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
 	                mBaiduMap
 	                        .setMyLocationConfiguration(new MyLocationConfiguration(
 	                                mCurrentMode, true, mCurrentMarker));
+	                mBaiduMap.showMapPoi(true);
 	                break;
 	            default:
 	                break;
@@ -261,6 +306,7 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
 	        mLocClient.start();
 	        mLocClient.requestLocation();
 	        
+	        
 	        //显示路况
 	        lukuang=(ImageButton)view.findViewById(R.id.lukuang);
 	        
@@ -309,6 +355,7 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
 				searchButtonProcess(v);
 				// 关闭定位图层
 		        mBaiduMap.setMyLocationEnabled(false);
+		        
 			}
         	
         });
@@ -359,7 +406,60 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
 		return view;
 	}
 
+/*
+ * 导航
+ * */
+	 /**
+     * 启动百度地图导航(Native)
+     */
+    public void startNavi() {
+        LatLng pt1 = new LatLng(mLat1, mLon1);
+        LatLng pt2 = new LatLng(mLat2, mLon2);
 
+        // 构建 导航参数
+        NaviParaOption para = new NaviParaOption()
+                .startPoint(pt1).endPoint(pt2)
+                .startName("天安门").endName("百度大厦");
+
+        try {
+            BaiduMapNavigation.openBaiduMapNavi(para, getActivity().getApplicationContext());
+        } catch (BaiduMapAppNotSupportNaviException e) {
+            e.printStackTrace();
+            showDialog();
+        }
+
+    }
+	
+    /**
+     * 提示未安装百度地图app或app版本过低
+     */
+    public void showDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity().getApplicationContext());
+        builder.setMessage("您尚未安装百度地图app或app版本过低，点击确认安装？");
+        builder.setTitle("提示");
+//        builder.setPositiveButton("确认", new OnClickListener(){
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				dialog.dismiss();
+//                OpenClientUtil.getLatestBaiduMapApp(OpenBaiduMap.this);
+//			}
+//        	
+//        });
+//
+//        builder.setNegativeButton("取消", new OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss();
+//            }
+//        });
+
+        builder.create().show();
+
+    }
+	
+	
 
 	@Override
     public void onSensorChanged(SensorEvent sensorEvent) {
@@ -656,3 +756,4 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
     
     
 }
+
