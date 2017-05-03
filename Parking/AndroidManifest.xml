@@ -83,16 +83,8 @@
         <service android:name="com.sina.weibo.sdk.net.DownloadService"
             android:exported="false">
   </service>
-  <service
-            android:name="com.baidu.location.f"
-            android:enabled="true"
-            android:process=":remote" >
-        </service>
-        
-  
         <meta-data
-            android:name="com.baidu.lbsapi.API_KEY"
-            
+            android:name="com.baidu.lbsapi.API_KEY"        
             android:value="48zP9XzdzeH3h9Yj3FNGYqrz0oU2KxGV" />
         
     </application>
