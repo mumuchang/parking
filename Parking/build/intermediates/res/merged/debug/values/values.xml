@@ -12,6 +12,8 @@
     <color name="line_bg">#ffbababa</color>
     <color name="main_bg_color">#ed4444</color>
     <color name="main_font_color">#9a9a9a</color>
+    <color name="normal_color">#6495ED</color>
+    <color name="press_color">#4169E1</color>
     <color name="text_red">#ffff5b3b</color>
     <color name="white">#ffffffff</color>
     <!-- From: file:/E:/Zongheshijianke/Github/parking/Parking/res/values/dimens.xml -->
