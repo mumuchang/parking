@@ -1,9 +1,16 @@
 package com.parking.service;
 
 
-
 import android.os.Bundle;
 
+import android.util.Log;
+import android.widget.Toast;
+import cn.bmob.v3.BmobBatch;
+import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.datatype.BatchResult;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.QueryListListener;
+import cn.bmob.v3.listener.SaveListener;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
@@ -11,14 +18,18 @@ import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.Polyline;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.model.inner.GeoPoint;
+import com.baidu.mapapi.model.inner.Point;
 import com.baidu.mapapi.search.poi.PoiResult;
+import com.bmob.demo.sms.bean.ParkinglotInfo;
 import com.parking.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ÓÃÓÚÏÔÊ¾poiµÄoverly
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾poiï¿½ï¿½overly
  */
 public class PoiService extends PoiManager {
 
@@ -26,21 +37,20 @@ public class PoiService extends PoiManager {
 
     private PoiResult mPoiResult = null;
     private int f;
+
     /**
-     * ¹¹Ôìº¯Êı
-     * 
-     * @param baiduMap
-     *            ¸Ã PoiOverlay ÒıÓÃµÄ BaiduMap ¶ÔÏó
+     * ï¿½ï¿½ï¿½ìº¯ï¿½ï¿½
+     *
+     * @param baiduMap ï¿½ï¿½ PoiOverlay ï¿½ï¿½ï¿½Ãµï¿½ BaiduMap ï¿½ï¿½ï¿½ï¿½
      */
-    public PoiService(BaiduMap baiduMap,int flag) {
-        super(baiduMap,flag);
+    public PoiService(BaiduMap baiduMap, int flag) {
+        super(baiduMap, flag);
     }
 
     /**
-     * ÉèÖÃPOIÊı¾İ
-     * 
-     * @param poiResult
-     *            ÉèÖÃPOIÊı¾İ
+     * ï¿½ï¿½ï¿½ï¿½POIï¿½ï¿½ï¿½ï¿½
+     *
+     * @param poiResult ï¿½ï¿½ï¿½ï¿½POIï¿½ï¿½ï¿½ï¿½
      */
     public void setData(PoiResult poiResult) {
         this.mPoiResult = poiResult;
@@ -53,6 +63,9 @@ public class PoiService extends PoiManager {
         }
         List<OverlayOptions> markerList = new ArrayList<OverlayOptions>();
         int markerSize = 0;
+
+        List<BmobObject> poiResult = new ArrayList<BmobObject>();
+
         for (int i = 0; i < mPoiResult.getAllPoi().size()
                 && markerSize < MAX_POI_SIZE; i++) {
             if (mPoiResult.getAllPoi().get(i).location == null) {
@@ -61,26 +74,51 @@ public class PoiService extends PoiManager {
             markerSize++;
             Bundle bundle = new Bundle();
             bundle.putInt("index", i);
-            if(flag==0){
-            	markerList.add(new MarkerOptions()
-                .icon(BitmapDescriptorFactory.fromAssetWithDpi("Icon_mark"
-                        + markerSize + ".png")).extraInfo(bundle)
-                .position(mPoiResult.getAllPoi().get(i).location));
+            if (flag == 0) {
+                markerList.add(new MarkerOptions()
+                        .icon(BitmapDescriptorFactory.fromAssetWithDpi("Icon_mark"
+                                + markerSize + ".png")).extraInfo(bundle)
+                        .position(mPoiResult.getAllPoi().get(i).location));
             }
-            if(flag==1){
-            	BitmapDescriptor centerBitmap = BitmapDescriptorFactory
-    	                .fromResource(R.drawable.pp);
-            	markerList.add(new MarkerOptions().icon(centerBitmap).extraInfo(bundle)
-                .position(mPoiResult.getAllPoi().get(i).location));
+            if (flag == 1) {
+                BitmapDescriptor centerBitmap = BitmapDescriptorFactory
+                        .fromResource(R.drawable.pp);
+                markerList.add(new MarkerOptions().icon(centerBitmap).extraInfo(bundle)
+                        .position(mPoiResult.getAllPoi().get(i).location));
+                //è·å–åœè½¦åœºä¿¡æ¯å†™å…¥æ•°æ®åº“
+                Double latitude = mPoiResult.getAllPoi().get(i).location.latitude;
+                Double longitude = mPoiResult.getAllPoi().get(i).location.longitude;
+                String parkinglotName = mPoiResult.getAllPoi().get(i).name;
+                String address = mPoiResult.getAllPoi().get(i).address;
+
+
+                ParkinglotInfo parkinglotInfo = new ParkinglotInfo();
+                parkinglotInfo.setParkinglot_name(parkinglotName);
+                parkinglotInfo.setLatitude(latitude);
+                parkinglotInfo.setLongitude(longitude);
+                parkinglotInfo.setDescription(address);
+                parkinglotInfo.setTotalNum(40);
+                parkinglotInfo.setPrice(i);
+
+                poiResult.add(parkinglotInfo);
             }
-            
+
         }
+
+        new BmobBatch().insertBatch(poiResult).doBatch(new QueryListListener<BatchResult>() {
+            @Override
+            public void done(List<BatchResult> list, BmobException e) {
+                if (e != null) {
+                    Log.e("å¤±è´¥äº†å¥½æ°”ï¼", e.getMessage());
+                }
+            }
+        });
         return markerList;
     }
 
     /**
-     * »ñÈ¡¸Ã PoiOverlay µÄ poiÊı¾İ
-     * 
+     * ï¿½ï¿½È¡ï¿½ï¿½ PoiOverlay ï¿½ï¿½ poiï¿½ï¿½ï¿½ï¿½
+     *
      * @return
      */
     public PoiResult getPoiResult() {
@@ -88,11 +126,10 @@ public class PoiService extends PoiManager {
     }
 
     /**
-     * ¸²Ğ´´Ë·½·¨ÒÔ¸Ä±äÄ¬ÈÏµã»÷ĞĞÎª
-     * 
-     * @param i
-     *            ±»µã»÷µÄpoiÔÚ
-     *            {@link com.baidu.mapapi.search.poi.PoiResult#getAllPoi()} ÖĞµÄË÷Òı
+     * ï¿½ï¿½Ğ´ï¿½Ë·ï¿½ï¿½ï¿½ï¿½Ô¸Ä±ï¿½Ä¬ï¿½Ïµï¿½ï¿½ï¿½ï¿½Îª
+     *
+     * @param i ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½poiï¿½ï¿½
+     *          {@link com.baidu.mapapi.search.poi.PoiResult#getAllPoi()} ï¿½Ğµï¿½ï¿½ï¿½ï¿½ï¿½
      * @return
      */
     public boolean onPoiClick(int i) {
