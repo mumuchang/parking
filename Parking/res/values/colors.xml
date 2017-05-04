@@ -15,4 +15,8 @@
     <color name="bg_btn_press_color_hui">#c1c1c1</color>
     <color name="press_color">#4169E1</color>
     <color name="normal_color">#6495ED</color>
+
+    <!--<drawable name="popupwindow_background1">0xb0000000</drawable>-->
+    <drawable name="popupwindow_background2">#ffffffff</drawable>
+
 </resources>

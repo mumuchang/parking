@@ -1,8 +1,19 @@
 package com.parking.fragments;
 
 
-
+import android.app.ActionBar;
+import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.view.*;
+import android.widget.*;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobQueryResult;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SQLQueryListener;
+import com.bmob.demo.sms.bean.ParkinglotInfo;
 import com.parking.R;
+import com.parking.service.DetailPopupWindow;
 import com.parking.service.PoiService;
 
 import android.app.Fragment;
@@ -10,23 +21,20 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import android.app.Fragment;
-import android.os.Bundle;	
+import android.os.Bundle;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 
-
-//¶¨Î»ÓĞ¹Ø
+//ï¿½ï¿½Î»ï¿½Ğ¹ï¿½
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -34,12 +42,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -57,11 +60,9 @@ import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.app.Fragment;
 
-//ËÑË÷Ïà¹Ø
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.CircleOptions;
@@ -93,17 +94,17 @@ import com.baidu.mapapi.search.sug.SuggestionResult;
 import com.baidu.mapapi.search.sug.SuggestionSearch;
 import com.baidu.mapapi.search.sug.SuggestionSearchOption;
 
-public class ShouyeFragment extends Fragment implements SensorEventListener,OnGetPoiSearchResultListener, OnGetSuggestionResultListener {
+public class ShouyeFragment extends Fragment implements SensorEventListener, OnGetPoiSearchResultListener, OnGetSuggestionResultListener {
 
 
- // ¶¨Î»Ïà¹Ø
+    // ï¿½ï¿½Î»ï¿½ï¿½ï¿½
     LocationClient mLocClient;
     public MyLocationListenner myListener = new MyLocationListenner();
     private LocationMode mCurrentMode;
     BitmapDescriptor mCurrentMarker;
     private static final int accuracyCircleFillColor = 0xAAFFFF88;
     private static final int accuracyCircleStrokeColor = 0xAA00FF00;
-	private static final String SENSOR_SERVICE = "sensor";
+    private static final String SENSOR_SERVICE = "sensor";
     private SensorManager mSensorManager;
     private Double lastX = 0.0;
     private int mCurrentDirection = 0;
@@ -113,18 +114,18 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
     String keystr = "";
     MapView mMapView;
     BaiduMap mBaiduMap;
-    int flag =0;//»æÖÆµÄ²»ÊÇÍ£³µ³¡
-    
-    View view=null;
+    int flag = 0;//ï¿½ï¿½ï¿½ÆµÄ²ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½
+
+    View view = null;
     //
-    
-    //Â·¿ö
-    private ImageButton lukuang=null;
-    
- //ËÑË÷Ïà¹Ø
+
+    //Â·ï¿½ï¿½
+    private ImageButton lukuang = null;
+
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     private PoiSearch mPoiSearch = null;
     private PoiSearch mPoiSearch1 = null;
-    
+
     private SuggestionSearch mSuggestionSearch = null;
     private List<String> suggest;
     private AutoCompleteTextView keyWorldsView = null;
@@ -132,243 +133,233 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
     private int loadIndex = 0;
     LatLng center = new LatLng(39.92235, 116.380338);
     int radius = 500;
-    LatLng southwest = new LatLng( 39.92235, 116.380338 );
-    LatLng northeast = new LatLng( 39.947246, 116.414977);
+    LatLng southwest = new LatLng(39.92235, 116.380338);
+    LatLng northeast = new LatLng(39.947246, 116.414977);
     LatLngBounds searchbound = new LatLngBounds.Builder().include(southwest).include(northeast).build();
 
-    int searchType = 0;  // ËÑË÷µÄÀàĞÍ£¬ÔÚÏÔÊ¾Ê±Çø·Ö
-    
-    private String city1="±±¾©";
-    private TextView tvSearch;
-    
-    PoiService overlay=null;
+    int searchType = 0;  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾Ê±ï¿½ï¿½ï¿½ï¿½
 
-    
-    
- // UIÏà¹Ø
+    private String city1 = "ï¿½ï¿½ï¿½ï¿½";
+    private TextView tvSearch;
+
+    PoiService overlay = null;
+
+
+    // UIï¿½ï¿½ï¿½
     OnCheckedChangeListener radioButtonListener;
     ImageButton requestLocButton;
-    boolean isFirstLoc = true; // ÊÇ·ñÊ×´Î¶¨Î»
+    boolean isFirstLoc = true; // ï¿½Ç·ï¿½ï¿½×´Î¶ï¿½Î»
     private MyLocationData locData;
     private float direction;
-    
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		//ÒıÈëÎÒÃÇµÄ²¼¾Ö
-		//ÒıÈëÎÒÃÇµÄ²¼¾Ö
-		SDKInitializer.initialize(getActivity().getApplicationContext());
-		 view=inflater.inflate(R.layout.tab01, container, false);
-		requestLocButton = (ImageButton) view.findViewById(R.id.button1);
-        mSensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);//»ñÈ¡´«¸ĞÆ÷¹ÜÀí·şÎñ
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÇµÄ²ï¿½ï¿½ï¿½
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÇµÄ²ï¿½ï¿½ï¿½
+        SDKInitializer.initialize(getActivity().getApplicationContext());
+        view = inflater.inflate(R.layout.tab01, container, false);
+        requestLocButton = (ImageButton) view.findViewById(R.id.button1);
+        mSensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);//ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         mCurrentMode = LocationMode.NORMAL;
-        
-        
-        
-        
+
+
         OnClickListener btnClickListener = new OnClickListener() {
-	         public void onClick(View v) {
-	   //ÖØĞÂ¶¨Î»
-	        	 mBaiduMap.setMyLocationEnabled(true);
-	        	 
-	        	 //¹Ø±ÕËÑË÷
-	        	
-	        	 mBaiduMap.clear();
-	        	 mBaiduMap.showMapPoi(false);
-	     		
-	    		//ĞŞ¸Ä¶¨Î»Êı¾İºóË¢ĞÂÍ¼²ãÉúĞ§
-	    		
-	        	 
-		            //¶¨Î»
-	          switch (mCurrentMode) {
-	            case NORMAL:
-	                
-	                requestLocButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.loc1));
-	                mCurrentMode = LocationMode.FOLLOWING;
-	                mBaiduMap
-	                        .setMyLocationConfiguration(new MyLocationConfiguration(
-	                                mCurrentMode, true, mCurrentMarker));
-	                MapStatus.Builder builder = new MapStatus.Builder();
-	                builder.overlook(0);
-	                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
-	                break;
-	            case COMPASS:
-	                
-	                requestLocButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.loc2));
-	                mCurrentMode = LocationMode.NORMAL;
-	                mBaiduMap
-	                        .setMyLocationConfiguration(new MyLocationConfiguration(
-	                                mCurrentMode, true, mCurrentMarker));
-	                MapStatus.Builder builder1 = new MapStatus.Builder();
-	                builder1.overlook(0);
-	                mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder1.build()));
-	                break;
-	            case FOLLOWING:
-	              
-	                requestLocButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.loc3));
-	                mCurrentMode = LocationMode.COMPASS;
-	                mBaiduMap
-	                        .setMyLocationConfiguration(new MyLocationConfiguration(
-	                                mCurrentMode, true, mCurrentMarker));
-	                break;
-	            default:
-	                break;
-	                }
+            public void onClick(View v) {
+                //ï¿½ï¿½ï¿½Â¶ï¿½Î»
+                mBaiduMap.setMyLocationEnabled(true);
 
-	            }
-	        };
-			
-	        requestLocButton.setOnClickListener(btnClickListener);
-	  
-	        RadioGroup group = (RadioGroup) view.findViewById(R.id.radioGroup);
-	        radioButtonListener = new OnCheckedChangeListener() {
-	            @Override
-	            public void onCheckedChanged(RadioGroup group, int checkedId) {
-	                if (checkedId == R.id.defaulticon) {
-	                    // ´«ÈënullÔò£¬»Ö¸´Ä¬ÈÏÍ¼±ê
-	                    mCurrentMarker = null;
-	                    mBaiduMap
-	                            .setMyLocationConfiguration(new MyLocationConfiguration(
-	                                    mCurrentMode, true, null));
-	                }
-	                if (checkedId == R.id.customicon) {
-	                    // ĞŞ¸ÄÎª×Ô¶¨Òåmarker
-	                    mCurrentMarker = BitmapDescriptorFactory
-	                            .fromResource(R.drawable.icon_geo);
-	                    mBaiduMap
-	                            .setMyLocationConfiguration(new MyLocationConfiguration(
-	                                    mCurrentMode, true, mCurrentMarker,
-	                                    accuracyCircleFillColor, accuracyCircleStrokeColor));
-	                }
-	            }
-	        };
-	        group.setOnCheckedChangeListener(radioButtonListener);
+                //ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½
 
-	        // µØÍ¼³õÊ¼»¯
-	        mMapView = (MapView) view.findViewById(R.id.bmapView);
-	        mBaiduMap = mMapView.getMap();
-	        // ¿ªÆô¶¨Î»Í¼²ã
-	        mBaiduMap.setMyLocationEnabled(true);
-	        // ¶¨Î»³õÊ¼»¯dubudi
-	        mLocClient = new LocationClient( getActivity().getApplicationContext());
-	        mLocClient.registerLocationListener(myListener);
-	        LocationClientOption option = new LocationClientOption();
-	        option.setOpenGps(true); // ´ò¿ªgps
-	        option.setCoorType("bd09ll"); // ÉèÖÃ×ø±êÀàĞÍ
-	        option.setScanSpan(1000);
-	        mLocClient.setLocOption(option);
-	        mLocClient.start();
-	        mLocClient.requestLocation();
-	        
-	        //ÏÔÊ¾Â·¿ö
-	        lukuang=(ImageButton)view.findViewById(R.id.lukuang);
-	        
-	        lukuang.setOnClickListener(new OnClickListener(){
+                mBaiduMap.clear();
+                mBaiduMap.showMapPoi(false);
 
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					if(mBaiduMap.isTrafficEnabled()==false){
-						lukuang.setBackgroundDrawable(getResources().getDrawable(R.drawable.lukuangstart));
-						mBaiduMap.setTrafficEnabled(true);
-					}else{
-						lukuang.setBackgroundDrawable(getResources().getDrawable(R.drawable.lukuangclose));
-						mBaiduMap.setTrafficEnabled(false);
-					}
-				}
-	        	
-	        });
-	        
-	        
-	       
-	        
-        
-        
-        
-        //ËÑË÷
-     // ³õÊ¼»¯ËÑË÷Ä£¿é£¬×¢²áËÑË÷ÊÂ¼ş¼àÌı
+                //ï¿½Ş¸Ä¶ï¿½Î»ï¿½ï¿½ï¿½İºï¿½Ë¢ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½Ğ§
+
+
+                //ï¿½ï¿½Î»
+                switch (mCurrentMode) {
+                    case NORMAL:
+
+                        requestLocButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.loc1));
+                        mCurrentMode = LocationMode.FOLLOWING;
+                        mBaiduMap
+                                .setMyLocationConfiguration(new MyLocationConfiguration(
+                                        mCurrentMode, true, mCurrentMarker));
+                        MapStatus.Builder builder = new MapStatus.Builder();
+                        builder.overlook(0);
+                        mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+                        break;
+                    case COMPASS:
+
+                        requestLocButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.loc2));
+                        mCurrentMode = LocationMode.NORMAL;
+                        mBaiduMap
+                                .setMyLocationConfiguration(new MyLocationConfiguration(
+                                        mCurrentMode, true, mCurrentMarker));
+                        MapStatus.Builder builder1 = new MapStatus.Builder();
+                        builder1.overlook(0);
+                        mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder1.build()));
+                        break;
+                    case FOLLOWING:
+
+                        requestLocButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.loc3));
+                        mCurrentMode = LocationMode.COMPASS;
+                        mBaiduMap
+                                .setMyLocationConfiguration(new MyLocationConfiguration(
+                                        mCurrentMode, true, mCurrentMarker));
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+        };
+
+        requestLocButton.setOnClickListener(btnClickListener);
+
+        RadioGroup group = (RadioGroup) view.findViewById(R.id.radioGroup);
+        radioButtonListener = new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.defaulticon) {
+                    // ï¿½ï¿½ï¿½ï¿½nullï¿½ò£¬»Ö¸ï¿½Ä¬ï¿½ï¿½Í¼ï¿½ï¿½
+                    mCurrentMarker = null;
+                    mBaiduMap
+                            .setMyLocationConfiguration(new MyLocationConfiguration(
+                                    mCurrentMode, true, null));
+                }
+                if (checkedId == R.id.customicon) {
+                    // ï¿½Ş¸ï¿½Îªï¿½Ô¶ï¿½ï¿½ï¿½marker
+                    mCurrentMarker = BitmapDescriptorFactory
+                            .fromResource(R.drawable.icon_geo);
+                    mBaiduMap
+                            .setMyLocationConfiguration(new MyLocationConfiguration(
+                                    mCurrentMode, true, mCurrentMarker,
+                                    accuracyCircleFillColor, accuracyCircleStrokeColor));
+                }
+            }
+        };
+        group.setOnCheckedChangeListener(radioButtonListener);
+
+        // ï¿½ï¿½Í¼ï¿½ï¿½Ê¼ï¿½ï¿½
+        mMapView = (MapView) view.findViewById(R.id.bmapView);
+        mBaiduMap = mMapView.getMap();
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»Í¼ï¿½ï¿½
+        mBaiduMap.setMyLocationEnabled(true);
+        // ï¿½ï¿½Î»ï¿½ï¿½Ê¼ï¿½ï¿½dubudi
+        mLocClient = new LocationClient(getActivity().getApplicationContext());
+        mLocClient.registerLocationListener(myListener);
+        LocationClientOption option = new LocationClientOption();
+        option.setOpenGps(true); // ï¿½ï¿½gps
+        option.setCoorType("bd09ll"); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        option.setScanSpan(1000);
+        mLocClient.setLocOption(option);
+        mLocClient.start();
+        mLocClient.requestLocation();
+
+        //ï¿½ï¿½Ê¾Â·ï¿½ï¿½
+        lukuang = (ImageButton) view.findViewById(R.id.lukuang);
+
+        lukuang.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                if (mBaiduMap.isTrafficEnabled() == false) {
+                    lukuang.setBackgroundDrawable(getResources().getDrawable(R.drawable.lukuangstart));
+                    mBaiduMap.setTrafficEnabled(true);
+                } else {
+                    lukuang.setBackgroundDrawable(getResources().getDrawable(R.drawable.lukuangclose));
+                    mBaiduMap.setTrafficEnabled(false);
+                }
+            }
+
+        });
+
+
+        //ï¿½ï¿½ï¿½ï¿½
+        // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½é£¬×¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½
         mPoiSearch = PoiSearch.newInstance();
         mPoiSearch.setOnGetPoiSearchResultListener(this);
-        
+
         mPoiSearch1 = PoiSearch.newInstance();
         mPoiSearch1.setOnGetPoiSearchResultListener(this);
-        
-     // ³õÊ¼»¯½¨ÒéËÑË÷Ä£¿é£¬×¢²á½¨ÒéËÑË÷ÊÂ¼ş¼àÌı
+
+        // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½é£¬×¢ï¿½á½¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½
         mSuggestionSearch = SuggestionSearch.newInstance();
         mSuggestionSearch.setOnGetSuggestionResultListener(this);
-        
+
         keyWorldsView = (AutoCompleteTextView) view.findViewById(R.id.searchkey);
         tvSearch = (TextView) view.findViewById(R.id.tvSearch);
-        
-        tvSearch.setOnClickListener(new OnClickListener(){
 
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				searchButtonProcess(v);
-				// ¹Ø±Õ¶¨Î»Í¼²ã
-		        mBaiduMap.setMyLocationEnabled(false);
-			}
-        	
+        tvSearch.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                mBaiduMap.setMyLocationEnabled(false);
+                // TODO Auto-generated method stub
+                searchButtonProcess(v);
+                // ï¿½Ø±Õ¶ï¿½Î»Í¼ï¿½ï¿½
+
+            }
+
         });
-     
-   
-        
-        sugAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_dropdown_item_1line,suggest);
-        
+
+
+        sugAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_dropdown_item_1line, suggest);
+
         keyWorldsView.setAdapter(sugAdapter);
         keyWorldsView.setThreshold(1);
-        
+
         /**
-         * µ±ÊäÈë¹Ø¼ü×Ö±ä»¯Ê±£¬¶¯Ì¬¸üĞÂ½¨ÒéÁĞ±í
+         * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ï¿½Ö±ä»¯Ê±ï¿½ï¿½ï¿½ï¿½Ì¬ï¿½ï¿½ï¿½Â½ï¿½ï¿½ï¿½ï¿½Ğ±ï¿½
          */
-        keyWorldsView.addTextChangedListener(new TextWatcher(){
+        keyWorldsView.addTextChangedListener(new TextWatcher() {
 
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-				// TODO Auto-generated method stub
-				
-			}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // TODO Auto-generated method stub
 
-			@Override
-			public void onTextChanged(CharSequence cs, int start, int before, int count) {
-				// TODO Auto-generated method stub
-				if (cs.length() <= 0) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence cs, int start, int before, int count) {
+                // TODO Auto-generated method stub
+                if (cs.length() <= 0) {
                     return;
                 }
 
                 /**
-                 * Ê¹ÓÃ½¨ÒéËÑË÷·şÎñ»ñÈ¡½¨ÒéÁĞ±í£¬½á¹ûÔÚonSuggestionResult()ÖĞ¸üĞÂ
+                 * Ê¹ï¿½Ã½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ğ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½onSuggestionResult()ï¿½Ğ¸ï¿½ï¿½ï¿½
                  */
                 mSuggestionSearch
-                        .requestSuggestion((new SuggestionSearchOption())//ruhe»ñµÃ¶¨Î»³ÇÊĞ
+                        .requestSuggestion((new SuggestionSearchOption())//ruheï¿½ï¿½Ã¶ï¿½Î»ï¿½ï¿½ï¿½ï¿½
                                 .keyword(cs.toString()).city(city1.toString()));
             }
 
 
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
 
-			@Override
-			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
-				
-			}
-        	
+            }
+
         });
-		
-		return view;
-	}
+
+        return view;
+    }
 
 
-
-	@Override
+    @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         double x = sensorEvent.values[SensorManager.DATA_X];
         if (Math.abs(x - lastX) > 1.0) {
             mCurrentDirection = (int) x;
             locData = new MyLocationData.Builder()
                     .accuracy(mCurrentAccracy)
-                    // ´Ë´¦ÉèÖÃ¿ª·¢Õß»ñÈ¡µ½µÄ·½ÏòĞÅÏ¢£¬Ë³Ê±Õë0-360
+                    // ï¿½Ë´ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½ß»ï¿½È¡ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½Ë³Ê±ï¿½ï¿½0-360
                     .direction(mCurrentDirection).latitude(mCurrentLat)
                     .longitude(mCurrentLon).build();
             mBaiduMap.setMyLocationData(locData);
@@ -382,36 +373,32 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
 
     }
 
-	
 
-
-
-	
-	/**
-     * ¶¨Î»SDK¼àÌıº¯Êı
+    /**
+     * ï¿½ï¿½Î»SDKï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      */
     public class MyLocationListenner implements BDLocationListener {
 
         @Override
         public void onReceiveLocation(BDLocation location) {
-            // map view Ïú»Ùºó²»ÔÚ´¦ÀíĞÂ½ÓÊÕµÄÎ»ÖÃ
+            // map view ï¿½ï¿½ï¿½Ùºï¿½ï¿½Ú´ï¿½ï¿½ï¿½ï¿½Â½ï¿½ï¿½Õµï¿½Î»ï¿½ï¿½
             if (location == null || mMapView == null) {
-            	Log.e("aaaaa", "aaaaaaaaa");
-            	return;
-                
+                Log.e("aaaaa", "aaaaaaaaa");
+                return;
+
             }
             mCurrentLat = location.getLatitude();
             mCurrentLon = location.getLongitude();
             mCurrentAccracy = location.getRadius();
             locData = new MyLocationData.Builder()
                     .accuracy(location.getRadius())
-                    // ´Ë´¦ÉèÖÃ¿ª·¢Õß»ñÈ¡µ½µÄ·½ÏòĞÅÏ¢£¬Ë³Ê±Õë0-360
+                    // ï¿½Ë´ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½ß»ï¿½È¡ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½Ë³Ê±ï¿½ï¿½0-360
                     .direction(mCurrentDirection).latitude(location.getLatitude())
                     .longitude(location.getLongitude()).build();
             mBaiduMap.setMyLocationData(locData);
-            
+
             //requestLocButton.setText("loc");
-            
+
             if (isFirstLoc) {
                 isFirstLoc = false;
                 LatLng ll = new LatLng(location.getLatitude(),
@@ -425,234 +412,263 @@ public class ShouyeFragment extends Fragment implements SensorEventListener,OnGe
         public void onReceivePoi(BDLocation poiLocation) {
         }
     }
-    
-    //µØÍ¼ÉúÃüÖÜÆÚ
+
+    //ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     @Override
-	public void onPause() {
+    public void onPause() {
         mMapView.onPause();
         super.onPause();
     }
 
     @Override
-	public void onResume() {
+    public void onResume() {
         mMapView.onResume();
         super.onResume();
-        //ÎªÏµÍ³µÄ·½Ïò´«¸ĞÆ÷×¢²á¼àÌıÆ÷
+        //ÎªÏµÍ³ï¿½Ä·ï¿½ï¿½ò´«¸ï¿½ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),
                 SensorManager.SENSOR_DELAY_UI);
     }
 
     @Override
-	public void onStop() {
-        //È¡Ïû×¢²á´«¸ĞÆ÷¼àÌı
+    public void onStop() {
+        //È¡ï¿½ï¿½×¢ï¿½á´«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         mSensorManager.unregisterListener(this);
         super.onStop();
     }
 
     @Override
-	public void onDestroy() {
-        // ÍË³öÊ±Ïú»Ù¶¨Î»
+    public void onDestroy() {
+        // ï¿½Ë³ï¿½Ê±ï¿½ï¿½ï¿½Ù¶ï¿½Î»
         mLocClient.stop();
-        // ¹Ø±Õ¶¨Î»Í¼²ã
+        // ï¿½Ø±Õ¶ï¿½Î»Í¼ï¿½ï¿½
         mBaiduMap.setMyLocationEnabled(false);
         mMapView.onDestroy();
         mMapView = null;
         mPoiSearch.destroy();
-        mPoiSearch1.destroy(); 
-	    mSuggestionSearch.destroy();
+        mPoiSearch1.destroy();
+        mSuggestionSearch.destroy();
         super.onDestroy();
     }
 
 
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-    //ËÑË÷´¦Àí
-	
-	 public void searchButtonProcess(View v) {
-	        searchType = 1;
-	       
-	       keystr=keyWorldsView.getText().toString();
-	        mBaiduMap.clear();
-	        flag=0;
-	        mPoiSearch.searchInCity((new PoiCitySearchOption())
-	                .city(city1).keyword(keystr).pageNum(loadIndex));
-	      //  flag=1;
-	        //mPoiSearch1.searchInCity((new PoiCitySearchOption())
-	             //   .city(city).keyword(keystr+"Í£³µ³¡").pageNum(loadIndex));
-	    }
-	 
-
-	    public void goToNextPage(View v) {
-	        loadIndex++;
-	        searchButtonProcess(null);
-	    }
-	 
-	    @SuppressWarnings("unused")
-		private class MySearch extends PoiCitySearchOption {
-	    	
-	    }
-			
-	    /**
-	     * ÏìÓ¦ÖÜ±ßËÑË÷°´Å¥µã»÷ÊÂ¼ş
-	     *
-	     * @param v
-	     */
-	    public void  searchNearbyProcess(View v) {
-	        searchType = 2;
-	        PoiNearbySearchOption nearbySearchOption = new PoiNearbySearchOption().keyword(keyWorldsView.getText()
-	                .toString()).sortType(PoiSortType.distance_from_near_to_far).location(center)
-	                .radius(radius).pageNum(loadIndex);
-	        mPoiSearch.searchNearby(nearbySearchOption);
-	    }
-
-	    /**
-	     * ÏìÓ¦ÇøÓòËÑË÷°´Å¥µã»÷ÊÂ¼ş
-	     *
-	     * @param v
-	     */
-	    public void searchBoundProcess(View v) {
-	        searchType = 3;
-
-	        mPoiSearch.searchInBound(new PoiBoundSearchOption().bound(searchbound)
-	                .keyword(keyWorldsView.getText().toString()));
-
-	    }
-	    
-	    
-	    /**
-	     * »ñÈ¡ÔÚÏß½¨ÒéËÑË÷½á¹û£¬µÃµ½requestSuggestion·µ»ØµÄËÑË÷½á¹û
-	     * @param res
-	     */
-		@Override
-		public void onGetSuggestionResult(SuggestionResult res) {
-			// TODO Auto-generated method stub
-			if (res == null || res.getAllSuggestions() == null) {
-	            return;
-	        }    
-	        suggest = new ArrayList<String>();
-	        for (SuggestionResult.SuggestionInfo info : res.getAllSuggestions()) {
-	            if (info.key != null) {
-	                suggest.add(info.key);
-	            }
-	        }
-	        sugAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_dropdown_item_1line, suggest);
-	        
-	        keyWorldsView.setAdapter(sugAdapter);
-	        sugAdapter.notifyDataSetChanged();
-		}
+    public void searchButtonProcess(View v) {
+        searchType = 1;
+        mBaiduMap.clear();
+        keystr = keyWorldsView.getText().toString();
+        //mBaiduMap.clear();
+        flag = 0;
+        mPoiSearch.searchInCity((new PoiCitySearchOption())
+                .city(city1).keyword(keystr).pageNum(loadIndex));
+        //flag=1;
+        //mPoiSearch1.searchInCity((new PoiCitySearchOption())
+        //   .city(city).keyword(keystr+"Í£ï¿½ï¿½ï¿½ï¿½").pageNum(loadIndex));
+    }
 
 
-		/**
-	     * »ñÈ¡POIÏêÇéËÑË÷½á¹û£¬µÃµ½searchPoiDetail·µ»ØµÄËÑË÷½á¹û
-	     * @param result
-	     */
-		@Override
-		public void onGetPoiDetailResult(PoiDetailResult result) {
-			// TODO Auto-generated method stub
-			
-			 if (result.error != SearchResult.ERRORNO.NO_ERROR) {
-		            Toast.makeText(getActivity().getApplicationContext(), "±§Ç¸£¬Î´ÕÒµ½½á¹û", Toast.LENGTH_SHORT)
-		                    .show();
-		        } else {
-		            Toast.makeText(getActivity().getApplicationContext(), result.getName() + ": " + result.getAddress(), Toast.LENGTH_SHORT)
-		                    .show();
-		        }
-		}
+    public void goToNextPage(View v) {
+        loadIndex++;
+        searchButtonProcess(null);
+    }
+
+    @SuppressWarnings("unused")
+    private class MySearch extends PoiCitySearchOption {
+
+    }
+
+    /**
+     * ï¿½ï¿½Ó¦ï¿½Ü±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½Â¼ï¿½
+     *
+     * @param v
+     */
+    public void searchNearbyProcess(View v) {
+        searchType = 2;
+        PoiNearbySearchOption nearbySearchOption = new PoiNearbySearchOption().keyword(keyWorldsView.getText()
+                .toString()).sortType(PoiSortType.distance_from_near_to_far).location(center)
+                .radius(radius).pageNum(loadIndex);
+        mPoiSearch.searchNearby(nearbySearchOption);
+    }
+
+    /**
+     * ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½Â¼ï¿½
+     *
+     * @param v
+     */
+    public void searchBoundProcess(View v) {
+        searchType = 3;
+
+        mPoiSearch.searchInBound(new PoiBoundSearchOption().bound(searchbound)
+                .keyword(keyWorldsView.getText().toString()));
+
+    }
 
 
-		@Override
-		public void onGetPoiIndoorResult(PoiIndoorResult arg0) {
-			// TODO Auto-generated method stub
-			
-		}
+    /**
+     * ï¿½ï¿½È¡ï¿½ï¿½ï¿½ß½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½requestSuggestionï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+     *
+     * @param res
+     */
+    @Override
+    public void onGetSuggestionResult(SuggestionResult res) {
+        // TODO Auto-generated method stub
+        if (res == null || res.getAllSuggestions() == null) {
+            return;
+        }
+        suggest = new ArrayList<String>();
+        for (SuggestionResult.SuggestionInfo info : res.getAllSuggestions()) {
+            if (info.key != null) {
+                suggest.add(info.key);
+            }
+        }
+        sugAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_dropdown_item_1line, suggest);
+
+        keyWorldsView.setAdapter(sugAdapter);
+        sugAdapter.notifyDataSetChanged();
+    }
 
 
-		/**
-	     * »ñÈ¡POIËÑË÷½á¹û£¬°üÀ¨searchInCity£¬searchNearby£¬searchInBound·µ»ØµÄËÑË÷½á¹û
-	     * @param result
-	     */
-		@Override
-		public void onGetPoiResult(PoiResult result) {
-			// TODO Auto-generated method stub
-			if (result == null || result.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {
-	            Toast.makeText(getActivity().getApplicationContext(), "Î´ÕÒµ½½á¹û", Toast.LENGTH_LONG)
-	                    .show();
-	            return;
-	        }
-	        if (result.error == SearchResult.ERRORNO.NO_ERROR) {
-	       
-	        		//Ä¿µÄµØ
-	           overlay = new MyPoiOverlay(mBaiduMap,flag);
-		            mBaiduMap.setOnMarkerClickListener(overlay);
-		            overlay.setData(result);
-		            overlay.addToMap();
-		            overlay.zoomToSpan();
-		        switch( searchType ) {
-	                case 2:
-	                    showNearbyArea(center, radius);
-	                    break;
-	                default:
-	                    break;
-	            }
-	            flag=1;
-	            mPoiSearch1.searchInCity((new PoiCitySearchOption())
-	                    .city(city1).keyword(keystr+"Í£³µ³¡").pageNum(loadIndex));
-	            
-	            return;
-	        }
-	        if (result.error == SearchResult.ERRORNO.AMBIGUOUS_KEYWORD) {
+    /**
+     * ï¿½ï¿½È¡POIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½searchPoiDetailï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+     *
+     * @param result
+     */
+    @Override
+    public void onGetPoiDetailResult(PoiDetailResult result) {
+        // TODO Auto-generated method stub
 
-	            // µ±ÊäÈë¹Ø¼ü×ÖÔÚ±¾ÊĞÃ»ÓĞÕÒµ½£¬µ«ÔÚÆäËû³ÇÊĞÕÒµ½Ê±£¬·µ»Ø°üº¬¸Ã¹Ø¼ü×ÖĞÅÏ¢µÄ³ÇÊĞÁĞ±í
-	            String strInfo = "ÔÚ";
-	            for (CityInfo cityInfo : result.getSuggestCityList()) {
-	                strInfo += cityInfo.city;
-	                strInfo += ",";
-	            }
-	            strInfo += "ÕÒµ½½á¹û";
-	            Toast.makeText(getActivity().getApplicationContext(), strInfo, Toast.LENGTH_LONG)
-	                    .show();
-	        }
-		}
+        if (result.error != SearchResult.ERRORNO.NO_ERROR) {
+            Toast.makeText(getActivity().getApplicationContext(), "ï¿½ï¿½Ç¸ï¿½ï¿½Î´ï¿½Òµï¿½ï¿½ï¿½ï¿½", Toast.LENGTH_SHORT)
+                    .show();
+        } else {
+            Toast.makeText(getActivity().getApplicationContext(), result.getName() + " : " + result.getAddress(), Toast.LENGTH_SHORT)
+                    .show();
+        }
+    }
 
 
-		private class MyPoiOverlay extends PoiService {
+    @Override
+    public void onGetPoiIndoorResult(PoiIndoorResult arg0) {
+        // TODO Auto-generated method stub
 
-	        public MyPoiOverlay(BaiduMap baiduMap,int f) {
-	            super(baiduMap,f);
-	        }
+    }
 
-	        @Override
-	        public boolean onPoiClick(int index) {
-	            super.onPoiClick(index);
-	            PoiInfo poi = getPoiResult().getAllPoi().get(index);
-	            // if (poi.hasCaterDetails) {
-	            mPoiSearch.searchPoiDetail((new PoiDetailSearchOption())
-	                    .poiUid(poi.uid));
-	            mPoiSearch1.searchPoiDetail((new PoiDetailSearchOption())
-	                    .poiUid(poi.uid));
-	            // }
-	            return true;
-	        }
-	    }
 
-		/**
-	     * ¶ÔÖÜ±ß¼ìË÷µÄ·¶Î§½øĞĞ»æÖÆ
-	     * @param center
-	     * @param radius
-	     */
-	    public void showNearbyArea( LatLng center, int radius) {
-	        BitmapDescriptor centerBitmap = BitmapDescriptorFactory
-	                .fromResource(R.drawable.icon_geo);
-	        MarkerOptions ooMarker = new MarkerOptions().position(center).icon(centerBitmap);
-	        mBaiduMap.addOverlay(ooMarker);
+    /**
+     * ï¿½ï¿½È¡POIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½searchInCityï¿½ï¿½searchNearbyï¿½ï¿½searchInBoundï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+     *
+     * @param result
+     */
+    @Override
+    public void onGetPoiResult(PoiResult result) {
+        // TODO Auto-generated method stub
+        if (result == null || result.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {
+            Toast.makeText(getActivity().getApplicationContext(), "Î´ï¿½Òµï¿½ï¿½ï¿½ï¿½", Toast.LENGTH_LONG)
+                    .show();
+            return;
+        }
+        if (result.error == SearchResult.ERRORNO.NO_ERROR) {
 
-	        OverlayOptions ooCircle = new CircleOptions().fillColor( 0xCCCCCC00 )
-	                .center(center).stroke(new Stroke(5, 0xFFFF00FF ))
-	                .radius(radius);
-	        mBaiduMap.addOverlay(ooCircle);
-	    }
+            //Ä¿ï¿½Äµï¿½
+            overlay = new MyPoiOverlay(mBaiduMap, flag);
+            mBaiduMap.setOnMarkerClickListener(overlay);
+            overlay.setData(result);
+            overlay.addToMap();
+            overlay.zoomToSpan();
+            switch (searchType) {
+                case 2:
+                    showNearbyArea(center, radius);
+                    break;
+                default:
+                    break;
+            }
+            flag = 1;
+            String parkinglot = keystr + "åœè½¦åœº";
+            mPoiSearch1.searchInCity((new PoiCitySearchOption())
+                    .city(city1).keyword(parkinglot).pageNum(loadIndex));
 
-    
-    
-    
-    
+            return;
+        }
+        if (result.error == SearchResult.ERRORNO.AMBIGUOUS_KEYWORD) {
+
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ï¿½ï¿½ï¿½Ú±ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ø°ï¿½ï¿½ï¿½ï¿½Ã¹Ø¼ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½Ä³ï¿½ï¿½ï¿½ï¿½Ğ±ï¿½
+            String strInfo = "ï¿½ï¿½";
+            for (CityInfo cityInfo : result.getSuggestCityList()) {
+                strInfo += cityInfo.city;
+                strInfo += ",";
+            }
+            strInfo += "ï¿½Òµï¿½ï¿½ï¿½ï¿½";
+            Toast.makeText(getActivity().getApplicationContext(), strInfo, Toast.LENGTH_LONG)
+                    .show();
+        }
+    }
+
+
+    private class MyPoiOverlay extends PoiService {
+
+        public MyPoiOverlay(BaiduMap baiduMap, int f) {
+            super(baiduMap, f);
+        }
+
+        @Override
+        public boolean onPoiClick(int index) {
+            super.onPoiClick(index);
+            PoiInfo poi = getPoiResult().getAllPoi().get(index);
+            String name = poi.name;
+            String address = poi.address;
+            BmobQuery<ParkinglotInfo> q1 = new BmobQuery<ParkinglotInfo>();
+            q1.addWhereEqualTo("parkinglot_name", name);
+            BmobQuery<ParkinglotInfo> q2 = new BmobQuery<ParkinglotInfo>();
+            q2.addWhereEqualTo("description", address);
+            List<BmobQuery<ParkinglotInfo>> andQuery = new ArrayList<BmobQuery<ParkinglotInfo>>();
+            andQuery.add(q1);
+            andQuery.add(q2);
+            final BmobQuery<ParkinglotInfo> query = new BmobQuery<ParkinglotInfo>();
+            query.and(andQuery);
+            final List<ParkinglotInfo> queryResult = new ArrayList<ParkinglotInfo>();
+            query.findObjects(new FindListener<ParkinglotInfo>() {
+                @Override
+                public void done(List<ParkinglotInfo> list, BmobException e) {
+                    if (e == null){
+                        if (list.size() != 0 ){
+                            DetailPopupWindow detailPopupWindow = new DetailPopupWindow(getActivity());
+                            detailPopupWindow.showAtLocation(getActivity().findViewById(R.id.tab01),Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0 , 0);
+                            TextView popName = (TextView) detailPopupWindow.view.findViewById(R.id.popName);
+                            popName.setText(list.get(0).getParkinglot_name());
+                            TextView popAddress = (TextView) detailPopupWindow.view.findViewById(R.id.address);
+                            popAddress.setText("åœ°å€ï¼š"+ list.get(0).getDescription());
+                            TextView popLeftNum = (TextView) detailPopupWindow.view.findViewById(R.id.leftNum);
+                            popLeftNum.setText("ç©ºä½™è½¦ä½ï¼š" + list.get(0).getCurrentLeftNum());
+                        }
+                    }else {
+                        Log.e("WRONG!!!!!!", e.getMessage());
+                    }
+                }
+            });
+
+            mPoiSearch1.searchPoiDetail((new PoiDetailSearchOption())
+                    .poiUid(poi.uid));
+            return true;
+        }
+    }
+
+    /**
+     * ï¿½ï¿½ï¿½Ü±ß¼ï¿½ï¿½ï¿½ï¿½Ä·ï¿½Î§ï¿½ï¿½ï¿½Ğ»ï¿½ï¿½ï¿½
+     *
+     * @param center
+     * @param radius
+     */
+    public void showNearbyArea(LatLng center, int radius) {
+        BitmapDescriptor centerBitmap = BitmapDescriptorFactory
+                .fromResource(R.drawable.icon_geo);
+        MarkerOptions ooMarker = new MarkerOptions().position(center).icon(centerBitmap);
+        mBaiduMap.addOverlay(ooMarker);
+
+        OverlayOptions ooCircle = new CircleOptions().fillColor(0xCCCCCC00)
+                .center(center).stroke(new Stroke(5, 0xFFFF00FF))
+                .radius(radius);
+        mBaiduMap.addOverlay(ooCircle);
+    }
+
+
 }
