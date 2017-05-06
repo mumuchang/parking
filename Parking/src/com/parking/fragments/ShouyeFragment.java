@@ -3,6 +3,7 @@ package com.parking.fragments;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.view.*;
 import android.widget.*;
@@ -11,8 +12,11 @@ import cn.bmob.v3.datatype.BmobQueryResult;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SQLQueryListener;
+
+import com.bmob.demo.sms.LoginActivity;
 import com.bmob.demo.sms.bean.ParkinglotInfo;
 import com.parking.R;
+import com.parking.reserve.ReserveActivity;
 import com.parking.service.DetailPopupWindow;
 import com.parking.service.PoiService;
 
@@ -28,7 +32,6 @@ import java.util.List;
 
 import android.app.Fragment;
 import android.os.Bundle;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +65,10 @@ import com.baidu.mapapi.model.LatLng;
 
 import android.app.Fragment;
 
+
+
+
+
 //�������
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
@@ -75,7 +82,6 @@ import com.baidu.mapapi.map.Stroke;
 import com.baidu.mapapi.map.SupportMapFragment;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.LatLngBounds;
-
 import com.baidu.mapapi.search.core.CityInfo;
 import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.core.SearchResult;
@@ -115,7 +121,8 @@ public class ShouyeFragment extends Fragment implements SensorEventListener, OnG
     MapView mMapView;
     BaiduMap mBaiduMap;
     int flag = 0;//���ƵĲ���ͣ����
-
+    int price=0;
+    int currentLeftNum=0;
     View view = null;
     //
 
@@ -614,8 +621,9 @@ public class ShouyeFragment extends Fragment implements SensorEventListener, OnG
         public boolean onPoiClick(int index) {
             super.onPoiClick(index);
             PoiInfo poi = getPoiResult().getAllPoi().get(index);
-            String name = poi.name;
+            final String name = poi.name;
             String address = poi.address;
+    
             BmobQuery<ParkinglotInfo> q1 = new BmobQuery<ParkinglotInfo>();
             q1.addWhereEqualTo("parkinglot_name", name);
             BmobQuery<ParkinglotInfo> q2 = new BmobQuery<ParkinglotInfo>();
@@ -631,6 +639,8 @@ public class ShouyeFragment extends Fragment implements SensorEventListener, OnG
                 public void done(List<ParkinglotInfo> list, BmobException e) {
                     if (e == null){
                         if (list.size() != 0 ){
+                        	price=list.get(0).getPrice();
+                        	currentLeftNum=list.get(0).getCurrentLeftNum();
                             DetailPopupWindow detailPopupWindow = new DetailPopupWindow(getActivity());
                             detailPopupWindow.showAtLocation(getActivity().findViewById(R.id.tab01),Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0 , 0);
                             TextView popName = (TextView) detailPopupWindow.view.findViewById(R.id.popName);
@@ -639,6 +649,25 @@ public class ShouyeFragment extends Fragment implements SensorEventListener, OnG
                             popAddress.setText("地址："+ list.get(0).getDescription());
                             TextView popLeftNum = (TextView) detailPopupWindow.view.findViewById(R.id.leftNum);
                             popLeftNum.setText("空余车位：" + list.get(0).getCurrentLeftNum());
+                            ImageView  reserve=(ImageView)detailPopupWindow.view.findViewById(R.id.imageView);
+                            reserve.setOnClickListener(new OnClickListener(){
+
+								@Override
+								public void onClick(View v) {
+									// TODO 自动生成的方法存根
+									
+									Intent intent=new Intent(getActivity()
+					                        .getApplicationContext(), ReserveActivity.class);
+									Bundle b = new Bundle();
+					                b.putString("name", name);//作为标识
+					                b.putInt("price",price);
+					                b.putInt("currentLeftNum", currentLeftNum);
+					             	intent.putExtra("android.intent.extra.INTENT", b);
+					             	startActivity(intent);
+								}
+                            	
+                            	
+                            });
                         }
                     }else {
                         Log.e("WRONG!!!!!!", e.getMessage());
