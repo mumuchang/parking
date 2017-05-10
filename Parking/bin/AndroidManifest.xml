@@ -92,12 +92,19 @@
         <service android:name="com.parking.service.LongRunningService" >
         </service>
 
+          <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" >
+        </service>
+        
+        
         <receiver android:name="com.parking.service.AlarmReceiver" >
         </receiver>
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="fOSmhvklF8niTVmEqEuAqKy20cVaYTDW" />
+            android:value="rPLXReLd5gDhcAuLx5QtO5KGuOamFqFd" />
     </application>
 
 </manifest>
