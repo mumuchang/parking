@@ -2,53 +2,130 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\lenovo\workspace\Parking\libs\org.apache.http.legacy.jar"
-        jumboMode="false"
-        revision="24.0.0"
-        sha1="5320fd78dd7f154e586970d4f02befc9b58432aa">
-        <dex dex="C:\Users\lenovo\workspace\Parking\build\intermediates\pre-dexed\debug\org.apache.http.legacy-8c1652d391eb3dd3e2b76de4062d950a48ef7477.jar" />
-    </item>
-    <item
-        jar="C:\Users\lenovo\workspace\Parking\libs\gson-2.6.2.jar"
-        jumboMode="false"
-        revision="24.0.0"
-        sha1="f1bc476cc167b18e66c297df599b2377131a8947">
-        <dex dex="C:\Users\lenovo\workspace\Parking\build\intermediates\pre-dexed\debug\gson-2.6.2-94728335add197545b0f4e4bebf028cfdf64c907.jar" />
-    </item>
-    <item
-        jar="C:\Users\lenovo\workspace\Parking\libs\okio-1.7.0.jar"
-        jumboMode="false"
-        revision="24.0.0"
-        sha1="1dc44f4cec20a64cebb68b90b4218f82ac7948b1">
-        <dex dex="C:\Users\lenovo\workspace\Parking\build\intermediates\pre-dexed\debug\okio-1.7.0-620e5d847ba19ada128c4eb4c772ad1b18182c52.jar" />
-    </item>
-    <item
-        jar="C:\Users\lenovo\workspace\Parking\libs\okhttp-3.3.1.jar"
-        jumboMode="false"
-        revision="24.0.0"
-        sha1="19047bdb6a4fc00a44124f64ca98e88fc204e7e3">
-        <dex dex="C:\Users\lenovo\workspace\Parking\build\intermediates\pre-dexed\debug\okhttp-3.3.1-4092e1ef6dd87a60f11ef03d4596f6dc68498448.jar" />
-    </item>
-    <item
-        jar="C:\Users\lenovo\workspace\Parking\libs\rxandroid-1.2.0.jar"
-        jumboMode="false"
-        revision="24.0.0"
-        sha1="927e8ef5711b115b65b2f35495d77352be2b3c09">
-        <dex dex="C:\Users\lenovo\workspace\Parking\build\intermediates\pre-dexed\debug\rxandroid-1.2.0-11ec1deb632af9a7803285813116928fe0fe7318.jar" />
-    </item>
-    <item
-        jar="C:\Users\lenovo\workspace\Parking\libs\BmobSDK_3.5.3_20161116.jar"
+        jar="E:\Zongheshijianke\Github\parking\Parking\libs\BmobSDK_3.5.3_20161116.jar"
         jumboMode="false"
         revision="24.0.0"
         sha1="7dd0893cb2b1d2e4249ce6a10934e3cba2d57d0f">
-        <dex dex="C:\Users\lenovo\workspace\Parking\build\intermediates\pre-dexed\debug\BmobSDK_3.5.3_20161116-65710e0fd74db060e23febfa8cd95d00fd689548.jar" />
+        <dex dex="E:\Zongheshijianke\Github\parking\Parking\build\intermediates\pre-dexed\debug\BmobSDK_3.5.3_20161116-53c139c4016c5a38c604baa16f54aecd73c0311a.jar" />
     </item>
     <item
-        jar="C:\Users\lenovo\workspace\Parking\libs\rxjava-1.1.6.jar"
+        jar="E:\Zongheshijianke\Github\parking\Parking\libs\rxandroid-1.2.0.jar"
+        jumboMode="false"
+        revision="24.0.0"
+        sha1="927e8ef5711b115b65b2f35495d77352be2b3c09">
+        <dex dex="E:\Zongheshijianke\Github\parking\Parking\build\intermediates\pre-dexed\debug\rxandroid-1.2.0-82072fed598d207161540a6e03e53de0a6a1358c.jar" />
+    </item>
+    <item
+        jar="E:\Zongheshijianke\Github\parking\Parking\libs\baidumapapi_radar_v4_3_0.jar"
+        jumboMode="false"
+        revision="24.0.0"
+        sha1="e05a086c670bc21ffede01346ac8131f944a8d1d">
+        <dex dex="E:\Zongheshijianke\Github\parking\Parking\build\intermediates\pre-dexed\debug\baidumapapi_radar_v4_3_0-1a125275736f23e6a756deb9292eedc7ab06461b.jar" />
+    </item>
+    <item
+        jar="E:\Zongheshijianke\Github\parking\Parking\libs\okio-1.7.0.jar"
+        jumboMode="false"
+        revision="24.0.0"
+        sha1="1dc44f4cec20a64cebb68b90b4218f82ac7948b1">
+        <dex dex="E:\Zongheshijianke\Github\parking\Parking\build\intermediates\pre-dexed\debug\okio-1.7.0-f4087214005fd492778d5c466eee0d809cabdbff.jar" />
+    </item>
+    <item
+        jar="E:\Zongheshijianke\Github\parking\Parking\libs\android-support-v4.jar"
+        jumboMode="false"
+        revision="24.0.0"
+        sha1="612846c9857077a039b533718f72db3bc041d389">
+        <dex dex="E:\Zongheshijianke\Github\parking\Parking\build\intermediates\pre-dexed\debug\android-support-v4-b2e726370da7450bdbebcfc29028d0707d569e85.jar" />
+    </item>
+    <item
+        jar="E:\Zongheshijianke\Github\parking\Parking\libs\org.apache.http.legacy.jar"
+        jumboMode="false"
+        revision="24.0.0"
+        sha1="5320fd78dd7f154e586970d4f02befc9b58432aa">
+        <dex dex="E:\Zongheshijianke\Github\parking\Parking\build\intermediates\pre-dexed\debug\org.apache.http.legacy-b302f7908f5155a91c167fb124b0c17635be83bf.jar" />
+    </item>
+    <item
+        jar="E:\Zongheshijianke\Github\parking\Parking\libs\baidumapapi_base_v4_3_0.jar"
+        jumboMode="false"
+        revision="24.0.0"
+        sha1="da619d97845d05e22272af05c426c8c22287d8c9">
+        <dex dex="E:\Zongheshijianke\Github\parking\Parking\build\intermediates\pre-dexed\debug\baidumapapi_base_v4_3_0-496197d30996c65ea0046651714a5e0b8be8f2a2.jar" />
+    </item>
+    <item
+        jar="E:\Zongheshijianke\Github\parking\Parking\libs\locSDK_6.13.jar"
+        jumboMode="false"
+        revision="24.0.0"
+        sha1="2cdb37444b41b42e1ce5a8a27e5d3c22e1c57479">
+        <dex dex="E:\Zongheshijianke\Github\parking\Parking\build\intermediates\pre-dexed\debug\locSDK_6.13-28df76202d3114f1dfa238891aea8f66cba7bfe3.jar" />
+    </item>
+    <item
+        jar="E:\Zongheshijianke\Github\parking\Parking\libs\baidumapapi_search_v4_3_0.jar"
+        jumboMode="false"
+        revision="24.0.0"
+        sha1="c5d0209bdbf81d88f91e9da9e7c255be517fe669">
+        <dex dex="E:\Zongheshijianke\Github\parking\Parking\build\intermediates\pre-dexed\debug\baidumapapi_search_v4_3_0-0cc343518c1e9fc5bc56a070b1c15936bdcd573c.jar" />
+    </item>
+    <item
+        jar="E:\Zongheshijianke\Github\parking\Parking\libs\weibosdkcore.jar"
+        jumboMode="false"
+        revision="24.0.0"
+        sha1="119e2034c8db764d5742ec1cdbcc4aa6bdf85e7a">
+        <dex dex="E:\Zongheshijianke\Github\parking\Parking\build\intermediates\pre-dexed\debug\weibosdkcore-734c7d09492efd0efa45118cc80a3a00a6ac97f9.jar" />
+    </item>
+    <item
+        jar="E:\Zongheshijianke\Github\parking\Parking\libs\gson-2.6.2.jar"
+        jumboMode="false"
+        revision="24.0.0"
+        sha1="f1bc476cc167b18e66c297df599b2377131a8947">
+        <dex dex="E:\Zongheshijianke\Github\parking\Parking\build\intermediates\pre-dexed\debug\gson-2.6.2-6144b8a1de82082fa32b0d8c92c906707bc1a2a1.jar" />
+    </item>
+    <item
+        jar="E:\Zongheshijianke\Github\parking\Parking\libs\okhttp-3.3.1.jar"
+        jumboMode="false"
+        revision="24.0.0"
+        sha1="19047bdb6a4fc00a44124f64ca98e88fc204e7e3">
+        <dex dex="E:\Zongheshijianke\Github\parking\Parking\build\intermediates\pre-dexed\debug\okhttp-3.3.1-01c1131c2954f18ed3151d7815e746bf0f8ef6a1.jar" />
+    </item>
+    <item
+        jar="E:\Zongheshijianke\Github\parking\Parking\libs\mta-sdk-1.6.2.jar"
+        jumboMode="false"
+        revision="24.0.0"
+        sha1="c184c69f43b1fe46390f7123717c65bd844bccb6">
+        <dex dex="E:\Zongheshijianke\Github\parking\Parking\build\intermediates\pre-dexed\debug\mta-sdk-1.6.2-24b1d95344d9498b04fc8bf6cffc0f0da1f5d1f9.jar" />
+    </item>
+    <item
+        jar="E:\Zongheshijianke\Github\parking\Parking\libs\rxjava-1.1.6.jar"
         jumboMode="false"
         revision="24.0.0"
         sha1="2586312cd2b8a511e4c6236736f5a039fc0f2273">
-        <dex dex="C:\Users\lenovo\workspace\Parking\build\intermediates\pre-dexed\debug\rxjava-1.1.6-a87b422643d84586e0602d379ac35368a656054c.jar" />
+        <dex dex="E:\Zongheshijianke\Github\parking\Parking\build\intermediates\pre-dexed\debug\rxjava-1.1.6-90167330a01d8223e93b650f872c0f645bac5c8a.jar" />
+    </item>
+    <item
+        jar="E:\Zongheshijianke\Github\parking\Parking\libs\baidumapapi_map_v4_3_0.jar"
+        jumboMode="false"
+        revision="24.0.0"
+        sha1="d9df0c586336328407908a8e972f45f155448de0">
+        <dex dex="E:\Zongheshijianke\Github\parking\Parking\build\intermediates\pre-dexed\debug\baidumapapi_map_v4_3_0-b9c723b9e7d5f7d4b8d1a5818d85e138bce45a95.jar" />
+    </item>
+    <item
+        jar="E:\Zongheshijianke\Github\parking\Parking\libs\baidumapapi_util_v4_3_0.jar"
+        jumboMode="false"
+        revision="24.0.0"
+        sha1="019719ab39d2ab74bb2feb34ad0a8d583a72395b">
+        <dex dex="E:\Zongheshijianke\Github\parking\Parking\build\intermediates\pre-dexed\debug\baidumapapi_util_v4_3_0-b5f57977a0f833acb523ef0c3da6bd557438fd75.jar" />
+    </item>
+    <item
+        jar="E:\Zongheshijianke\Github\parking\Parking\libs\baidumapapi_cloud_v4_3_0.jar"
+        jumboMode="false"
+        revision="24.0.0"
+        sha1="b3f69fc11ff6e173eb34734d4d60a08ae858f45d">
+        <dex dex="E:\Zongheshijianke\Github\parking\Parking\build\intermediates\pre-dexed\debug\baidumapapi_cloud_v4_3_0-556f9b018caff20b1f953c7469c0a37815165bb5.jar" />
+    </item>
+    <item
+        jar="E:\Zongheshijianke\Github\parking\Parking\libs\open_sdk_r5785.jar"
+        jumboMode="false"
+        revision="24.0.0"
+        sha1="174d5b56a80a73d36041056613f0a4b36542588d">
+        <dex dex="E:\Zongheshijianke\Github\parking\Parking\build\intermediates\pre-dexed\debug\open_sdk_r5785-3c072ebe2462fb1fac5eb3a2541c5a26c5bb9aec.jar" />
     </item>
 
 </items>
