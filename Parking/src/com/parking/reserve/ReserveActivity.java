@@ -57,6 +57,8 @@ public class ReserveActivity extends Activity {
 	String objectId;
 	int number;// 可用
 	int count = 1;
+	int startHour2;
+	int startMin2;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -72,9 +74,9 @@ public class ReserveActivity extends Activity {
 		price = bundle.getInt("price") + "";
 		remain = bundle.getInt("currentLeftNum") + "";
 		name.setText(parkingName);
-		priceView.setText("价格:"+price+"元/小时");
-		remainView.setText("空车位："+remain);
-		totalView.setText("总车位："+total);
+		priceView.setText("价格:" + price + "元/小时");
+		remainView.setText("空车位：" + remain);
+		totalView.setText("总车位：" + total);
 		text = (TimeTextView) findViewById(R.id.text);
 		hour = (EditText) findViewById(R.id.hour);
 		minute = (EditText) findViewById(R.id.minute);
@@ -110,7 +112,7 @@ public class ReserveActivity extends Activity {
 				long t2 = date.getTime();
 				text.setTimes(t2);
 				cancleAlarm();
-				
+
 				// count = 0;
 				// timer.cancel();
 			}
@@ -132,34 +134,37 @@ public class ReserveActivity extends Activity {
 
 			@Override
 			public void onClick(View v) { // TODO 自动生成的方法存根
-				if (addReserveInfo() == false) {
-
-				}
+				addReserveInfo();
 			}
 
 		});
 
 	}
 
-	private boolean addReserveInfo() {
+	private void addReserveInfo() {
 		// TODO 自动生成的方法存根
-		SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+		/*SharedPreferences pkInfo = getSharedPreferences("pkInfo", MODE_PRIVATE);
+		SharedPreferences.Editor editor = pkInfo.edit();
+		if (pkInfo.getString("pkId", "") != null) {
+			Toast.makeText(ReserveActivity.this, "已存在预约，不可重复预约",
+					Toast.LENGTH_LONG).show();
+			return false;
+		}
+*/		SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 		Date curDate = new Date(System.currentTimeMillis());
 		String startTime = format.format(curDate);
 		String str[] = startTime.split(":");
 		String startHour = str[0];
 		String startMin = str[1];
-		int startHour2 = Integer.parseInt(startHour);
-		int startMin2 = Integer.parseInt(startMin);
-		if (hour.getText().toString() == null
-				|| minute.getText().toString() == null) {
+		startHour2 = Integer.parseInt(startHour);
+		startMin2 = Integer.parseInt(startMin);
+		if (hour.getText().toString().equals("")
+				|| minute.getText().toString().equals("")) {
 			Toast.makeText(ReserveActivity.this, "时间不能为空", Toast.LENGTH_SHORT)
-					.show();
-			return false;
-		}
+					.show();		
+		}else{
 		endHour = Integer.parseInt(hour.getText().toString());
 		endMin = Integer.parseInt(minute.getText().toString());
-
 		if (!text.getText().equals("暂无任何预约")) {
 			Toast.makeText(ReserveActivity.this, "当前已有预约", Toast.LENGTH_LONG)
 					.show();
@@ -175,34 +180,14 @@ public class ReserveActivity extends Activity {
 		} else {
 			// 表中更新
 			addToTable();
-			// Toast.makeText(ReserveActivity.this, "预约成功", Toast.LENGTH_LONG)
-			// .show();
-			cancle.setVisibility(View.VISIBLE);
-			stop.setVisibility(View.VISIBLE);
-			Long end = (long) (endHour * (3600 * 1000) + endMin * (60 * 1000));
-			Long start = (long) (startHour2 * (3600 * 1000) + startMin2
-					* (60 * 1000));
-			recLen = (end - start) / 1000;
-			Date date = new Date();
-			long t2 = date.getTime();
-			SharedPreferences pkInfo = getSharedPreferences("pkInfo",
-					MODE_PRIVATE);
-			SharedPreferences.Editor editor = pkInfo.edit();
-			editor.putLong("time", t2 + recLen*1000);
-			// new Thread(new MyThread()).start();
-			editor.commit();
-			startAlarm();
-			text.setTimes(t2 +  recLen*1000);
-			// startCountDownTime(recLen);
-
 		}
-		return true;
+		}
 	}
 
 	private void startAlarm() {
 		// TODO 自动生成的方法存根
 		AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		long triggerAtTime = SystemClock.elapsedRealtime() + recLen*1000;
+		long triggerAtTime = SystemClock.elapsedRealtime() + recLen * 1000;
 		// 此处设置开启AlarmReceiver这个Service
 		Intent i = new Intent(this, AlarmReceiver.class);
 		PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
@@ -256,15 +241,20 @@ public class ReserveActivity extends Activity {
 				// TODO 自动生成的方法存根
 				if (arg1 == null) {
 					Toast.makeText(ReserveActivity.this,
-							"查询成功：共" + arg0.size() + "条数据。", Toast.LENGTH_LONG)
+							"查询成功：共" + arg0.size() + "条数据。", Toast.LENGTH_SHORT)
 							.show();
 					for (ParkinglotInfo pk : arg0) {
 
 						objectId = pk.getObjectId();
 						number = pk.getCurrentLeftNum();
-						Toast.makeText(ReserveActivity.this, number + "",
-								Toast.LENGTH_LONG).show();
-						update("add");
+					/*	Toast.makeText(ReserveActivity.this, number + "",
+								Toast.LENGTH_SHORT).show();*/
+						if (number != 0) {
+							update("add");
+						} else {
+							Toast.makeText(ReserveActivity.this, "空车位为0,无法预约",
+									Toast.LENGTH_LONG).show();
+						}
 
 					}
 				} else {
@@ -280,12 +270,11 @@ public class ReserveActivity extends Activity {
 
 	public void update(String type) {
 		// TODO 自动生成的方法存根
+		final String type1 = type;
 		SharedPreferences pkInfo = getSharedPreferences("pkInfo", MODE_PRIVATE);
 		SharedPreferences.Editor editor = pkInfo.edit();
-		Toast.makeText(ReserveActivity.this, number + "", Toast.LENGTH_LONG)
-				.show();
 		ParkinglotInfo pk = new ParkinglotInfo();
-		if (type.equals("add")) {
+		if (type1.equals("add")) {
 			pk.setCurrentLeftNum(number - 1);
 			editor.putString("pkId", objectId);
 
@@ -301,10 +290,28 @@ public class ReserveActivity extends Activity {
 				// TODO 自动生成的方法存根
 				if (arg0 == null) {
 					Toast.makeText(ReserveActivity.this, "更新成功",
-							Toast.LENGTH_LONG).show();
+							Toast.LENGTH_SHORT).show();
+					if (type1.equals("add")) {
+						SharedPreferences pkInfo = getSharedPreferences(
+								"pkInfo", MODE_PRIVATE);
+						SharedPreferences.Editor editor = pkInfo.edit();
+						cancle.setVisibility(View.VISIBLE);
+						stop.setVisibility(View.VISIBLE);
+						Long end = (long) (endHour * (3600 * 1000) + endMin
+								* (60 * 1000));
+						Long start = (long) (startHour2 * (3600 * 1000) + startMin2
+								* (60 * 1000));
+						recLen = (end - start) / 1000;
+						Date date = new Date();
+						long t2 = date.getTime();
+						editor.putLong("time", t2 + recLen * 1000);
+						editor.commit();
+						startAlarm();
+						text.setTimes(t2 + recLen * 1000);
+					}
 				} else {
 					Toast.makeText(ReserveActivity.this, "更新失败",
-							Toast.LENGTH_LONG).show();
+							Toast.LENGTH_SHORT).show();
 				}
 			}
 
@@ -356,7 +363,7 @@ public class ReserveActivity extends Activity {
 		});
 
 	}
-    
+
 	class MyThread implements Runnable {
 
 		public void run() {
@@ -381,25 +388,29 @@ public class ReserveActivity extends Activity {
 		}
 	}
 
-    public void onResume(){
-    	super.onResume();
-    	SharedPreferences pkInfo = getSharedPreferences("pkInfo", MODE_PRIVATE);
+	public void onResume() {
+		super.onResume();
+		SharedPreferences pkInfo = getSharedPreferences("pkInfo", MODE_PRIVATE);
 		SharedPreferences.Editor editor = pkInfo.edit();
 		objectId = pkInfo.getString("pkId", "");
 		if (!objectId.equals("")) {
 			Long time = pkInfo.getLong("time", 0);
-			Toast.makeText(ReserveActivity.this,"time"+time, Toast.LENGTH_LONG).show();
+			Toast.makeText(ReserveActivity.this, "time" + time,
+					Toast.LENGTH_SHORT).show();
 			Date date = new Date();
 			long t2 = date.getTime();
 			if (t2 < time) {
 				cancle.setVisibility(View.VISIBLE);
 				stop.setVisibility(View.VISIBLE);
 				text.setTimes(time);
-			}else{
-			    deleteTable();
+			} else {
+				//deleteTable();
+				cancle.setVisibility(View.GONE);
+				stop.setVisibility(View.GONE);
+				text.setText("暂无任何预约");
 			}
 		}
 
-    }
+	}
 
 }
