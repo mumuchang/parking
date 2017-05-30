@@ -137,6 +137,7 @@ public class ShouyeFragment extends Fragment
 	// 搜索相关
 	private PoiSearch mPoiSearch = null;
 	private PoiSearch mPoiSearch1 = null;
+	private ImageView ivDeleteText;
 
 	private SuggestionSearch mSuggestionSearch = null;
 	private List<String> suggest;
@@ -179,6 +180,7 @@ public class ShouyeFragment extends Fragment
 		SDKInitializer.initialize(getActivity().getApplicationContext());
 		view = inflater.inflate(R.layout.tab01, container, false);
 		requestLocButton = (ImageButton) view.findViewById(R.id.button1);
+		ivDeleteText = (ImageView) view.findViewById(R.id.ivDeleteText);
 		mSensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);// 获取传感器管理服务
 		mCurrentMode = LocationMode.NORMAL;
 
@@ -237,6 +239,14 @@ public class ShouyeFragment extends Fragment
 			}
 		};
 
+		 ivDeleteText.setOnClickListener(new OnClickListener() {
+				
+				public void onClick(View v) {
+					keyWorldsView.setText("");
+				}
+			});
+	        
+		
 		requestLocButton.setOnClickListener(btnClickListener);
 
 		RadioGroup group = (RadioGroup) view.findViewById(R.id.radioGroup);
@@ -328,6 +338,8 @@ public class ShouyeFragment extends Fragment
 		sugAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
 				android.R.layout.simple_dropdown_item_1line, suggest);
 
+		
+		
 		keyWorldsView.setAdapter(sugAdapter);
 		keyWorldsView.setThreshold(1);
 		/**
@@ -353,12 +365,18 @@ public class ShouyeFragment extends Fragment
 				 */
 				mSuggestionSearch.requestSuggestion((new SuggestionSearchOption())// ruhe获得定位城市
 						.keyword(cs.toString()).city(city1.toString()));
+				
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
 				// TODO Auto-generated method stub
 
+				if (s.length() == 0) {
+					ivDeleteText.setVisibility(View.GONE);
+				} else {
+					ivDeleteText.setVisibility(View.VISIBLE);
+				}
 			}
 
 		});
@@ -572,14 +590,17 @@ public class ShouyeFragment extends Fragment
 			return;
 		}
 		suggest = new ArrayList<String>();
+		
 		for (SuggestionResult.SuggestionInfo info : res.getAllSuggestions()) {
 			if (info.key != null) {
 				suggest.add(info.key);
+				
 			}
 		}
 		sugAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
 				android.R.layout.simple_dropdown_item_1line, suggest);
 
+	
 		keyWorldsView.setAdapter(sugAdapter);
 		sugAdapter.notifyDataSetChanged();
 	}
