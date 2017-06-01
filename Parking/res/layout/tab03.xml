@@ -64,8 +64,32 @@
             android:layout_toRightOf="@id/qianbao"
             android:text="钱包"
             android:textSize="15sp" />
-    </RelativeLayout>
+       </RelativeLayout>
+       <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="#ffffff" >
 
+        <ImageView
+            android:id="@+id/add"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/email90" />
+
+        <TextView
+            android:id="@+id/license"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@id/add"
+            android:text="车牌管理"
+            android:textSize="15sp" />
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -82,12 +106,13 @@
             android:src="@drawable/history" />
 
         <TextView
+            android:id="@+id/record"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
             android:layout_toRightOf="@id/jilu"
-            android:text="记录"
+            android:text="停车记录"
             android:textSize="15sp" />
     </RelativeLayout>
 
@@ -107,6 +132,7 @@
             android:src="@drawable/email90" />
 
         <TextView
+            android:id="@+id/suggest"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

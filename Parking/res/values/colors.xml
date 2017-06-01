@@ -15,8 +15,20 @@
     <color name="bg_btn_press_color_hui">#c1c1c1</color>
     <color name="press_color">#4169E1</color>
     <color name="normal_color">#6495ED</color>
-
-    <!--<drawable name="popupwindow_background1">0xb0000000</drawable>-->
+    <color name="bg_black">#000000</color>
+    <color name="bg_white">#FFFFFF</color>
+    <color name="bg_topbar">#FCFCFC</color>
+    <color name="bg_gray">#00F1F1F1</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="text_gray">#8D7A71</color>
+    <color name="text_white">#FFFFFF</color>
+    <color name="text_yellow">#FFC800</color>
+    <color name="text_topbar">#694E42</color>
+    <color name="div_white">#E5E5E5</color>
+    <color name="content_color">#666666</color>
+    <color name="white_normal">#ffffffff</color>
+    <color name="login_button_background">#71c297</color>
+    <!-- <drawable name="popupwindow_background1">0xb0000000</drawable> -->
     <drawable name="popupwindow_background2">#ffffffff</drawable>
 
 </resources>

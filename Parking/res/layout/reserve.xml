@@ -56,6 +56,7 @@
             android:id="@+id/imageView1"
             android:layout_width="70dp"
             android:layout_height="70dp"
+            android:contentDescription="TODO"
             android:src="@drawable/park" />
 
         <TextView
@@ -172,6 +173,37 @@
         </EditText>
     </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp" 
+         android:background="#ffffff">
+
+        <TextView
+            android:id="@+id/value"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/select"
+            android:background="@drawable/shape_help_category_tv_bg"
+            android:drawableRight="@drawable/icon_down"
+            android:padding="10dp"
+            android:text="请选择车牌号"
+            android:textColor="@color/content_color"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/select"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dp"
+            android:text="车牌号"
+            android:textSize="15dp" />
+
+    </RelativeLayout>
+
     <Button
         android:id="@+id/reserve"
         android:layout_width="match_parent"
@@ -182,7 +214,6 @@
         android:background="@drawable/press_selector"
         android:text="预约"
         android:textColor="#ffffff"
-        android:textSize="16sp" >
-    </Button>
+        android:textSize="16sp" />
 
 </LinearLayout>

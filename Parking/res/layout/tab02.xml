@@ -7,7 +7,6 @@
         android:layout_height="match_parent"
         android:textSize="40sp"
         android:textStyle="bold"
-        android:text="这是停车场附近界面"
         android:gravity="center"/>
 
 </LinearLayout>

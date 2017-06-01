@@ -36,7 +36,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
     <application
         android:allowBackup="true"
@@ -48,6 +48,7 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -82,8 +83,14 @@
         <activity android:name="com.bmob.demo.sms.LoginMainActivity" />
         <activity android:name="com.bmob.demo.sms.RegisterActivity" />
         <activity android:name="com.bmob.demo.sms.ResetPasswordActivity" />
-        <activity android:name="com.parking.reserve.ReserveActivity" >
+        <activity android:name="com.parking.reserve.ReserveActivity" />
+        <activity android:name="com.parking.service.RecordActivity" >
         </activity>
+        <activity android:name="com.parking.service.SuggestActivity" >
+        </activity>
+        <activity android:name="com.parking.service.LicenseActivity"></activity>
+        <activity android:name="com.parking.service.AddLicense"></activity>
+      
 
         <service
             android:name="com.sina.weibo.sdk.net.DownloadService"
@@ -91,20 +98,18 @@
         </service>
         <service android:name="com.parking.service.LongRunningService" >
         </service>
-
-          <service
+        <service
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote" >
         </service>
-        
-        
+
         <receiver android:name="com.parking.service.AlarmReceiver" >
         </receiver>
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="rPLXReLd5gDhcAuLx5QtO5KGuOamFqFd" />
+            android:value="fOSmhvklF8niTVmEqEuAqKy20cVaYTDW" />
     </application>
 
 </manifest>
