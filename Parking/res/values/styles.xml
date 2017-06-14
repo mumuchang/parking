@@ -63,4 +63,9 @@
         <item name="android:windowExitAnimation">@anim/out_anim</item>
     </style>
 
+    <style name="TabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/text_gray</item>
+    </style>
+
 </resources>
