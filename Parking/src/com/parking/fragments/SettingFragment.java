@@ -9,7 +9,7 @@ import com.parking.service.LicenseActivity;
 import com.parking.service.RecordActivity;
 import com.parking.service.SuggestActivity;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,7 +29,7 @@ public class SettingFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// ÒýÈëÎÒÃÇµÄ²¼¾Ö
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÇµÄ²ï¿½ï¿½ï¿½
 		return inflater.inflate(R.layout.tab03, container, false);
 
 	}
@@ -45,7 +45,7 @@ public class SettingFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				// TODO ×Ô¶¯Éú³ÉµÄ·½·¨´æ¸ù
+				// TODO ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ÉµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				Intent intent = new Intent(getActivity()
 						.getApplicationContext(), RecordActivity.class);
 				startActivity(intent);
@@ -71,7 +71,7 @@ public class SettingFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				// TODO ×Ô¶¯Éú³ÉµÄ·½·¨´æ¸ù
+				// TODO ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ÉµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				Intent intent = new Intent(getActivity()
 						.getApplicationContext(), LicenseActivity.class);
 				startActivity(intent);
@@ -82,7 +82,7 @@ public class SettingFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				// TODO ×Ô¶¯Éú³ÉµÄ·½·¨´æ¸ù
+				// TODO ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ÉµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				Intent intent = new Intent(getActivity()
 						.getApplicationContext(), SuggestActivity.class);
 				startActivity(intent);
