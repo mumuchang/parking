@@ -1,16 +1,13 @@
 package com.parking.service;
 
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.SaveListener;
 
+import com.bmob.dao.SaveBmob;
 import com.bmob.demo.sms.bean.Suggestion;
 import com.bmob.demo.sms.bean.User;
 import com.parking.R;
-import com.parking.main.MainActivity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -25,17 +22,18 @@ public class SuggestActivity extends Activity {
 	TextView commit;
 	EditText suggestion;
 	ImageView back;
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.suggest);
-		
-		back=(ImageView) findViewById(R.id.iv_left);
+
+		back = (ImageView) findViewById(R.id.iv_left);
 		back.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO 自动生成的方法存根
-	                	finish();
+				finish();
 			}
 		});
 		commit = (TextView) findViewById(R.id.commit);
@@ -52,6 +50,7 @@ public class SuggestActivity extends Activity {
 
 	protected void sendMessage() {
 		// TODO 自动生成的方法存根
+		SaveBmob save = new SaveBmob();
 		String str;
 		str = suggestion.getText().toString();
 		Suggestion ss = new Suggestion();
@@ -65,14 +64,14 @@ public class SuggestActivity extends Activity {
 		if (user != null) {
 			ss.setUsername(user.getUsername());
 			ss.setSuggest(str);
-			ss.save(new SaveListener<String>() {
-				@Override
-				public void done(String arg0, BmobException arg1) {
-					// TODO 自动生成的方法存根
-					Toast.makeText(SuggestActivity.this, "发表成功", Toast.LENGTH_LONG)
-					.show();
-				}
-			});
+			if (save.saveSuggest(ss)) {
+				Toast.makeText(SuggestActivity.this, "发表成功", Toast.LENGTH_LONG)
+						.show();
+			} else {
+
+				Toast.makeText(SuggestActivity.this, "发表失败", Toast.LENGTH_LONG)
+						.show();
+			}
 		} else {
 			Toast.makeText(SuggestActivity.this, "请先登录", Toast.LENGTH_LONG)
 					.show();

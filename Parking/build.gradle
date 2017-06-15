@@ -1,9 +1,9 @@
 buildscript {
     repositories {
-        jcenter()
+       jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.3.0'
+       classpath 'com.android.tools.build:gradle:1.3.0'
     }
 }
 apply plugin: 'android'
@@ -17,11 +17,11 @@ dependencies {
 android {
     compileSdkVersion 23
     buildToolsVersion "24.0.0"
-
-    lintOptions {
-        abortOnError false
-    }
-
+    
+    lintOptions{
+           abortOnError false
+     }
+     
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -31,7 +31,7 @@ android {
             renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
-            jniLibs.srcDirs = ['libs']//soï¿½Ä¼ï¿½Â·ï¿½ï¿½
+            jniLibs.srcDirs=['libs']//soÎÄ¼þÂ·¾¶
         }
 
         // Move the tests to tests/java, tests/res, etc...

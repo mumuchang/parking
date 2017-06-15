@@ -3,7 +3,6 @@ package com.parking.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
@@ -22,7 +21,6 @@ import android.view.View.OnClickListener;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class LicenseActivity extends Activity {
 
@@ -56,12 +54,14 @@ public class LicenseActivity extends Activity {
 				finish();
 			}
 		});
-		mylist=(ListView) findViewById(R.id.mylist);
-	    list=new ArrayList<HashMap<String,String>>();
+		mylist = (ListView) findViewById(R.id.mylist);
+		list = new ArrayList<HashMap<String, String>>();
 	}
-	
+
 	private void init() {
 		// TODO 自动生成的方法存根
+		// QueryBmob qb=new QueryBmob();
+		// list=qb.queryLicense2();
 		BmobQuery<License> query = new BmobQuery<License>();
 		User user = BmobUser.getCurrentUser(User.class);
 		query.addWhereEqualTo("username", user.getUsername());
@@ -72,20 +72,22 @@ public class LicenseActivity extends Activity {
 			public void done(List<License> arg0, BmobException arg1) {
 				// TODO 自动生成的方法存根
 				if (arg1 == null) {
-					for(License lic:arg0){
-						  HashMap<String ,String> map=new HashMap<String,String>();
-						  map.put("license", lic.getLicense());
-					      list.add(map);
+					for (License lic : arg0) {
+						HashMap<String, String> map = new HashMap<String, String>();
+						map.put("license", lic.getLicense());
+						list.add(map);
+						listAdapter = new SimpleAdapter(LicenseActivity.this,
+								list, R.layout.item,
+								new String[] { "license" },
+								new int[] { R.id.items });
+						mylist.setAdapter(listAdapter);
 					}
-					listAdapter = new SimpleAdapter(LicenseActivity.this, list,
-							R.layout.item, new String[] { "license" },
-							new int[] { R.id.items });
-					mylist.setAdapter(listAdapter);
 				} else {
 
 				}
 			}
 		});
+
 	}
 
 	public void onResume() {

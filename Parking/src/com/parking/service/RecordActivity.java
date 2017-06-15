@@ -9,7 +9,7 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-import com.bmob.demo.sms.bean.License;
+import com.bmob.dao.QueryBmob;
 import com.bmob.demo.sms.bean.Record;
 import com.bmob.demo.sms.bean.User;
 import com.parking.R;
@@ -23,29 +23,33 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 public class RecordActivity extends Activity {
-	
+
 	ImageView back;
 	SimpleAdapter listAdapter;
 	ListView mylist;
 	List<HashMap<String, String>> list;
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.record);
-		back=(ImageView) findViewById(R.id.iv_left);
+		back = (ImageView) findViewById(R.id.iv_left);
 		back.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO 自动生成的方法存根
-	                	finish();
+				finish();
 			}
 		});
-		mylist=(ListView) findViewById(R.id.mylist);
-	    list=new ArrayList<HashMap<String,String>>();
+		mylist = (ListView) findViewById(R.id.mylist);
+		list = new ArrayList<HashMap<String, String>>();
 		init();
 	}
+
 	private void init() {
 		// TODO 自动生成的方法存根
+       // QueryBmob qb=new QueryBmob();
+       // list=qb.queryRecord();
 		BmobQuery<Record> query = new BmobQuery<Record>();
 		User user = BmobUser.getCurrentUser(User.class);
 		query.addWhereEqualTo("username", user.getUsername());
@@ -62,16 +66,19 @@ public class RecordActivity extends Activity {
 						  map.put("name", rr.getParkingName());
 						  map.put("time", rr.getCreatedAt());
 					      list.add(map);
-					}
-					listAdapter = new SimpleAdapter(RecordActivity.this, list,
-							R.layout.recorditem, new String[] {"time", "license","name" },
-							new int[] { R.id.time,R.id.license,R.id.parking });
-					mylist.setAdapter(listAdapter);
-				} else {
+					  	  listAdapter = new SimpleAdapter(RecordActivity.this, list,
+								R.layout.recorditem,
+								new String[] { "time", "license", "name" }, new int[] {
+										R.id.time, R.id.license, R.id.parking });
+						  mylist.setAdapter(listAdapter);
 
+					}
+				} else {
+                 
 				}
 			}
 		});
+	
 	}
 
 }
