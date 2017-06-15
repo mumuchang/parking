@@ -1,9 +1,8 @@
 package com.parking.service;
 
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.SaveListener;
 
+import com.bmob.dao.SaveBmob;
 import com.bmob.demo.sms.bean.License;
 import com.bmob.demo.sms.bean.User;
 import com.parking.R;
@@ -51,6 +50,7 @@ public class AddLicense extends Activity {
 
 	protected void saveLicense() {
 		// TODO 自动生成的方法存根
+		   SaveBmob save=new SaveBmob();
 		   lic = license.getText().toString();
 		   String carnumRegex = "[\u4e00-\u9fa5]{1}[A-Z]{1}[A-Z_0-9]{5}";
 		   if (TextUtils.isEmpty(lic)){
@@ -66,14 +66,13 @@ public class AddLicense extends Activity {
 			if (user != null) {
 				ss.setUsername(user.getUsername());
 				ss.setLicense(lic);
-				ss.save(new SaveListener<String>() {
-					@Override
-					public void done(String arg0, BmobException arg1) {
-						// TODO 自动生成的方法存根
+				if(save.saveLicense(ss)){
 						Toast.makeText(AddLicense.this, "添加成功", Toast.LENGTH_LONG)
 						.show();
-					}
-				});
+				}else{
+					   Toast.makeText(AddLicense.this, "添加失败", Toast.LENGTH_LONG)
+					   .show();
+				}
 			} else {
 				Toast.makeText(AddLicense.this, "请先登录", Toast.LENGTH_LONG)
 						.show();

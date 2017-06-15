@@ -1,18 +1,16 @@
 package com.parking.news;
 
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 
 /**
  * Created by lenovo on 2017/6/3.
@@ -22,13 +20,13 @@ public class ParseXML {
 
     public static Document readXMLFile(InputStream inFile) throws JDOMException, IOException {
         Document doc = null;
-        //浣跨敤JDOM鎸囧畾锛屼娇鐢ㄨВ鏋愬櫒
+        //使用JDOM指定，使用解析器
         SAXBuilder sb = new SAXBuilder();
 
 //        File fXml = new File(inFile);
 
 //        if (fXml.exists()) {
-            //鍔犺浇涓�涓猉ML鏂囦欢锛屽緱鍒癲ocument
+            //加载一个XML文件，得到document
             doc = sb.build(inFile);
 
 //        }
@@ -37,11 +35,11 @@ public class ParseXML {
 
 
     public static List parse(Document doc) {
-        //瀹氫箟newsFeeds杩斿洖鍒楄〃绫诲瀷
+        //定义newsFeeds返回列表类型
         List newsFeeds = new ArrayList();
-        //鍒涘缓newsFeeds瀹炰緥
+        //创建newsFeeds实例
         NewsFeed newsFeed = null;
-        //寰楀埌XML鏂囨。鐨勬牴鑺傜偣"rss"
+        //得到XML文档的根节点"rss"
         Element root = doc.getRootElement();
 
         Element eChannel = root.getChild("channel");

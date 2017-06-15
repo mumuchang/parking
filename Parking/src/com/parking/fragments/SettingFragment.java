@@ -29,7 +29,7 @@ public class SettingFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÇµÄ²ï¿½ï¿½ï¿½
+		// ÒýÈëÎÒÃÇµÄ²¼¾Ö
 		return inflater.inflate(R.layout.tab03, container, false);
 
 	}
@@ -45,7 +45,7 @@ public class SettingFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				// TODO ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ÉµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				// TODO ×Ô¶¯Éú³ÉµÄ·½·¨´æ¸ù
 				Intent intent = new Intent(getActivity()
 						.getApplicationContext(), RecordActivity.class);
 				startActivity(intent);
@@ -71,7 +71,7 @@ public class SettingFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				// TODO ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ÉµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				// TODO ×Ô¶¯Éú³ÉµÄ·½·¨´æ¸ù
 				Intent intent = new Intent(getActivity()
 						.getApplicationContext(), LicenseActivity.class);
 				startActivity(intent);
@@ -82,7 +82,7 @@ public class SettingFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				// TODO ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ÉµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				// TODO ×Ô¶¯Éú³ÉµÄ·½·¨´æ¸ù
 				Intent intent = new Intent(getActivity()
 						.getApplicationContext(), SuggestActivity.class);
 				startActivity(intent);

@@ -3,7 +3,6 @@ package com.parking.reserve;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -11,17 +10,15 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
-import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
-import com.bmob.demo.sms.bean.License;
+import com.bmob.dao.QueryBmob;
+import com.bmob.dao.SaveBmob;
 import com.bmob.demo.sms.bean.ParkinglotInfo;
 import com.bmob.demo.sms.bean.Record;
 import com.bmob.demo.sms.bean.User;
 import com.parking.R;
-import com.parking.service.AddLicense;
 import com.parking.service.AlarmReceiver;
-import com.parking.service.LicenseActivity;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -37,7 +34,6 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -191,27 +187,10 @@ public class ReserveActivity extends Activity {
 	 * 初始化数据
 	 */
 	private void initData() {
-
 		list = new ArrayList<String>();
-		BmobQuery<License> query = new BmobQuery<License>();
-		User user = BmobUser.getCurrentUser(User.class);
-		query.addWhereEqualTo("username", user.getUsername());
-		query.setLimit(10);
-		// 执行查询方法
-		query.findObjects(new FindListener<License>() {
-			@Override
-			public void done(List<License> arg0, BmobException arg1) {
-				// TODO 自动生成的方法存根
-				if (arg1 == null) {
-					for (License lic : arg0) {
-						list.add(lic.getLicense());
-					}
-				} else {
-
-				}
-			}
-		});
-
+		QueryBmob qb = new QueryBmob();
+		list = qb.queryLicense();
+		Toast.makeText(ReserveActivity.this,list.toString(), Toast.LENGTH_SHORT).show();
 	}
 
 	/**
@@ -236,13 +215,8 @@ public class ReserveActivity extends Activity {
 		rr.setUsername(user.getUsername());
 		rr.setParkingName(pkInfo.getString("name", ""));
 		rr.setLicense(pkInfo.getString("license", ""));
-		rr.save(new SaveListener<String>() {
-			@Override
-			public void done(String arg0, BmobException arg1) {
-				// TODO 自动生成的方法存根
-
-			}
-		});
+		SaveBmob save = new SaveBmob();
+		save.saveRecord(rr);
 
 	}
 
@@ -416,6 +390,7 @@ public class ReserveActivity extends Activity {
 	}
 
 	public void onResume() {
+		
 		super.onResume();
 		SharedPreferences pkInfo = getSharedPreferences("pkInfo", MODE_PRIVATE);
 		SharedPreferences.Editor editor = pkInfo.edit();
